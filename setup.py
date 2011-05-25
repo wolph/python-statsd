@@ -5,13 +5,13 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
-    name = 'statsd',
+    name = 'python-statsd',
     version = '1.0',
     author = 'Rick van Hattem',
     author_email = 'Rick.van.Hattem@Fawo.nl',
     description = '''statsd is a client for Etsy's node-js statsd server. 
         A proxy for the Graphite stats collection and graphing server.''',
-    url='https://github.com/WoLpH/py-statsd',
+    url='https://github.com/WoLpH/python-statsd',
     license = 'BSD',
     packages=['statsd'],
     long_description=read('README.rst'),
