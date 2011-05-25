@@ -29,63 +29,57 @@ Basic Usage
 Timers
 ^^^^^^
 
-.. code-block:: python
+    >>> import statsd
 
-    import statsd
+    >>> timer = statsd.Timer('MyApplication')
 
-    timer = statsd.Timer('MyApplication')
-
-    timer.start()
-    # do something here
-    timer.stop('SomeTimer')
+    >>> timer.start()
+    >>> # do something here
+    >>> timer.stop('SomeTimer')
 
 
 Counters
 ^^^^^^^^
 
-.. code-block:: python
+    >>> import statsd
 
-    import statsd
-
-    counter = statsd.Counter('MyApplication')
-    # do something here
-    counter += 1
+    >>> counter = statsd.Counter('MyApplication')
+    >>> # do something here
+    >>> counter += 1
 
     
 
 Advanced Usage
 --------------
 
-.. code-block:: python
+    >>> import statsd
 
-    import statsd
+    >>> # Open a connection to `server` on port `1234` with a `50%` sample rate
+    >>> statsd_connection = statsd.Connection(
+    ...     name='server',
+    ...     port=1234,
+    ...     sample_rate=0.5,
+    ... )
 
-    # Open a connection to `server` on port `1234` with a `50%` sample rate
-    statsd_connection = statsd.Connection(
-        name='server',
-        port=1234,
-        sample_rate=0.5,
-    )
+    >>> # Create a client for this application
+    >>> statsd_client = statsd.Client(__name__, statsd_connection)
 
-    # Create a client for this application
-    statsd_client = statsd.Client(__name__, statsd_connection)
+    >>> class SomeClass(object):
+    ...     def __init__(self):
+    ...         # Create a client specific for this class
+    ...         self.statsd_client = statsd_client.get_client(
+    ...             self.__class__.__name__)
 
-    class SomeClass(object):
-        def __init__(self):
-            # Create a client specific for this class
-            self.statsd_client = statsd_client.get_client(
-                self.__class__.__name__)
+    ...     def do_something(self):
+    ...         # Create a `timer` client
+    ...         timer = self.statsd_client.get_client(class_=statsd.Timer)
 
-        def do_something(self):
-            # Create a `timer` client
-            timer = self.statsd_client.get_client(class_=statsd.Timer)
+    ...         # start the measurement
+    ...         timer.start()
 
-            # start the measurement
-            timer.start()
+    ...         # do something
+    ...         timer.interval('intermediate_value')
 
-            # do something
-            timer.interval('intermediate_value')
-
-            # do something else
-            timer.stop('total')
+    ...         # do something else
+    ...         timer.stop('total')
 
