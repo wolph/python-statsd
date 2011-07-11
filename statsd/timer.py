@@ -27,7 +27,7 @@ class Timer(statsd.Client):
             'running')
         self._last = self._start = time.time()
 
-    def _send(self, subname, delta):
+    def send(self, subname, delta):
         '''Send the data to statsd via self.connection
 
         :keyword subname: The subname to report the data to (appended to the
@@ -46,7 +46,7 @@ class Timer(statsd.Client):
             client name)
         '''
         t = time.time()
-        response = self._send(subname, t - self._last)
+        response = self.send(subname, t - self._last)
         self._last = t
         return response
 
@@ -59,7 +59,7 @@ class Timer(statsd.Client):
         assert self._stop is None, ('Unable to stop, the timer is already '
             'stopped')
         self._stop = time.time()
-        return self._send(subname, self._stop - self._start)
+        return self.send(subname, self._stop - self._start)
 
     def _decorate(self, name, function, class_=None):
         class_ = class_ or Timer

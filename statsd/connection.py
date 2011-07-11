@@ -12,9 +12,9 @@ class Connection(object):
     '''
 
     def __init__(self, host='localhost', port=8125, sample_rate=1):
-        self._host = host
-        self._port = int(port)
-        self._sample_rate = sample_rate or 1
+        self._host = host or 'localhost'
+        self._port = int(port) or 8125
+        self._sample_rate = sample_rate or 1.0
         self.logger = logging.getLogger('%s.%s'
             % (__name__, self.__class__.__name__))
         self.udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -45,12 +45,12 @@ class Connection(object):
                 send_data = '%s:%s' % (stat, value)
                 self.udp_sock.sendto(send_data, (self._host, self._port))
         except Exception, e:
-            self.log.exception('unexpected error %r while sending data', e)
+            self.logger.exception('unexpected error %r while sending data', e)
 
     def __repr__(self):
         return '<%s[%s:%d] P(%.1f)>' % (
             self.__class__.__name__,
-            self.host,
-            self.port,
-            self.sample_rate,
+            self._host,
+            self._port,
+            self._sample_rate,
         )
