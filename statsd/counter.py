@@ -69,3 +69,9 @@ class Counter(statsd.Client):
         self.decrement(delta=delta)
         return self
 
+def increment(key):
+    counter = Counter(key).increment()
+
+def decrement(key):
+    counter = Counter(key).decrement()
+
