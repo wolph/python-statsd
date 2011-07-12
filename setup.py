@@ -1,12 +1,14 @@
 import os
 from setuptools import setup
 
-def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+if os.path.isfile('README.rst'):
+    long_description = open('README.rst').read()
+else:
+    long_description = 'See http://pypi.python.org/pypi/python-statsd/'
 
 setup(
     name = 'python-statsd',
-    version = '1.2',
+    version = '1.3',
     author = 'Rick van Hattem',
     author_email = 'Rick.van.Hattem@Fawo.nl',
     description = '''statsd is a client for Etsy's node-js statsd server. 
@@ -14,7 +16,7 @@ setup(
     url='https://github.com/WoLpH/python-statsd',
     license = 'BSD',
     packages=['statsd'],
-    long_description=read('README.rst'),
+    long_description=long_description,
     test_suite='nose.collector',
     setup_requires=['nose'],
     classifiers=[
