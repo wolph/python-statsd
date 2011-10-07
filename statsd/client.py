@@ -54,7 +54,7 @@ class Client(object):
         if not class_:
             class_ = self.__class__
 
-        return self.__class__(
+        return class_(
             name=name,
             connection=self.connection,
         )
