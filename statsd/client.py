@@ -13,8 +13,8 @@ class Client(object):
     #: prefixed by name
     name = None
 
-    #: The :class:`~statsd.connection.Connection` to use, creates a new connection if no \
-    #: connection is given
+    #: The :class:`~statsd.connection.Connection` to use, creates a new
+    #: connection if no connection is given
     connection = None
 
     def __init__(self, name, connection=None):
@@ -27,6 +27,7 @@ class Client(object):
 
     @classmethod
     def _get_name(cls, *name_parts):
+
         def to_str(value):
             if isinstance(value, unicode):
                 value = value.encode('utf-8', 'replace')
@@ -43,8 +44,8 @@ class Client(object):
         :keyword name: The name to use, if the name for this client was `spam`
             and the `name` argument is `eggs` than the resulting name will be
             `spam.eggs`
-        :keyword class_: The :class:`~statsd.client.Client` subclass to use (e.g.
-            :class:`~statsd.Timer` or :class:`~statsd.counter.Counter`)
+        :keyword class_: The :class:`~statsd.client.Client` subclass to use
+            (e.g. :class:`~statsd.Timer` or :class:`~statsd.counter.Counter`)
         '''
 
         # If the name was given, use it. Otherwise simply clone

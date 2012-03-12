@@ -11,10 +11,20 @@ class Connection(object):
     :keyword sample_rate: The sample rate, defaults to `1` (meaning always)
     '''
 
-    def __init__(self, host='localhost', port=8125, sample_rate=1):
-        self._host = host or 'localhost'
-        self._port = int(port) or 8125
-        self._sample_rate = sample_rate or 1.0
+    default_host = 'localhost'
+    default_port = 8125
+    default_sample_rate = 1
+
+    @classmethod
+    def set_defaults(cls, host='localhost', port=8125, sample_rate=1):
+        cls.default_host = host
+        cls.default_port = port
+        cls.default_sample_rate = sample_rate
+
+    def __init__(self, host=None, port=None, sample_rate=None):
+        self._host = host or self.default_host
+        self._port = int(port or self.default_port)
+        self._sample_rate = sample_rate or self.default_sample_rate
         self.logger = logging.getLogger('%s.%s'
             % (__name__, self.__class__.__name__))
         self.udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -54,3 +64,4 @@ class Connection(object):
             self._port,
             self._sample_rate,
         )
+

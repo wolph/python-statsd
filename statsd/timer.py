@@ -10,7 +10,7 @@ class Timer(statsd.Client):
 
     >>> timer = Timer('application_name')
     >>> timer.start()
-    >>> # do something
+    >>>  # do something
     >>> timer.stop('executed_action')
     '''
 
@@ -86,12 +86,12 @@ class Timer(statsd.Client):
 
         >>> from statsd import Timer
         >>> timer = Timer('application_name')
-        >>> 
+        >>>
         >>> @timer.decorate
         ... def some_function():
         ...     # resulting timer name: application_name.some_function
         ...     pass
-        >>> 
+        >>>
         >>> @timer.decorate('my_timer')
         ... def some_function():
         ...     # resulting timer name: application_name.my_timer
@@ -102,6 +102,7 @@ class Timer(statsd.Client):
             return lambda f: self._decorate(function_or_name, f)
         else:
             return self._decorate(function_or_name.__name__, function_or_name)
+
 
 if __name__ == '__main__':
     import doctest
