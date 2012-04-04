@@ -2,7 +2,7 @@ import statsd
 
 
 class Gauge(statsd.Client):
-    '''Class to implement a statd gauge
+    '''Class to implement a statsd gauge
 
     '''
 
