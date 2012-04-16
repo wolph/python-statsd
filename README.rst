@@ -47,6 +47,15 @@ Counters
     >>> # do something here
     >>> counter += 1
 
+
+Gauge
+^^^^^
+
+    >>> import statsd
+    >>>
+    >>> gauge = statsd.Counter('MyApplication')
+    >>> # do something here
+    >>> gauge.send('SomeName', value)
     
 
 Advanced Usage
