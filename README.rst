@@ -56,6 +56,36 @@ Gauge
     >>> gauge = statsd.Counter('MyApplication')
     >>> # do something here
     >>> gauge.send('SomeName', value)
+
+
+Raw
+^^^
+
+Raw strings should be e.g. pre-summarized data or other data that will
+get passed directly to carbon.  This can be used as a time and
+bandwidth-saving mechanism sending a lot of samples could use a lot of
+bandwidth (more b/w is used in udp headers than data for a gauge, for
+instance).
+
+
+
+    >>> import statsd
+    >>>
+    >>> raw = statsd.Counter('MyApplication')
+    >>> # do something here
+    >>> raw.send('SomeName', 'somekey:%d'.format(value))
+
+Average
+^^^^^^^
+
+    >>> import statsd
+    >>>
+    >>> average = statsd.Counter('MyApplication')
+    >>> # do something here
+    >>> average.send('SomeName', 'somekey:%d'.format(value))
+
+
+
     
 
 Advanced Usage
