@@ -65,7 +65,7 @@ Advanced Usage
     >>> 
     >>> # Open a connection to `server` on port `1234` with a `50%` sample rate
     >>> statsd_connection = statsd.Connection(
-    ...     name='server',
+    ...     host='server',
     ...     port=1234,
     ...     sample_rate=0.5,
     ... )
