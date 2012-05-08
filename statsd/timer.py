@@ -15,7 +15,7 @@ class Timer(statsd.Client):
     '''
 
     def __init__(self, name, connection=None):
-        statsd.Client.__init__(self, name, connection=connection)
+        super(Timer, self).__init__(name, connection=connection)
         self._start = None
         self._last = None
         self._stop = None
