@@ -53,7 +53,7 @@ Gauge
 
     >>> import statsd
     >>>
-    >>> gauge = statsd.Counter('MyApplication')
+    >>> gauge = statsd.Gauge('MyApplication')
     >>> # do something here
     >>> gauge.send('SomeName', value)
 
@@ -71,21 +71,22 @@ instance).
 
     >>> import statsd
     >>>
-    >>> raw = statsd.Counter('MyApplication')
+    >>> raw = statsd.Raw('MyApplication', connection)
     >>> # do something here
-    >>> raw.send('SomeName', 'somekey:%d'.format(value))
+    >>> raw.send('SomeName', value, timestamp)
+
+The raw type wants to have a timestamp in seconds since the epoch (the
+standard unix timestamp, e.g. the output of "date +%s"), but if you leave it out or
+provide None it will provide the current time as part of the message
 
 Average
 ^^^^^^^
 
     >>> import statsd
     >>>
-    >>> average = statsd.Counter('MyApplication')
+    >>> average = statsd.Average('MyApplication', connection)
     >>> # do something here
     >>> average.send('SomeName', 'somekey:%d'.format(value))
-
-
-
     
 
 Advanced Usage
