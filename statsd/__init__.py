@@ -6,5 +6,6 @@ from statsd.average import Average
 from statsd.raw import Raw
 from statsd.counter import Counter, increment, decrement
 
-__all__ = ['Client', 'Connection', 'Timer', 'Counter', 'Gauge', 'Average', 'Raw'  'increment',
-    'decrement']
+__all__ = ['Client', 'Connection', 'Timer', 'Counter', 'Gauge', 'Average',
+    'Raw', 'increment', 'decrement']
+

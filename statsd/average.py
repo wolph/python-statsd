@@ -6,8 +6,8 @@ class Average(statsd.Client):
     This value will be averaged against other messages before being
     sent.
 
-    See https://github.com/chuyskywalker/statsd/blob/master/README.md for more info.
-
+    See https://github.com/chuyskywalker/statsd/blob/master/README.md for
+    more info.
     '''
 
     def send(self, subname, value):

@@ -10,7 +10,8 @@ class Raw(statsd.Client):
     the raw patch, and this data will be sent
     to graphite pretty much unchanged.
 
-    See https://github.com/chuyskywalker/statsd/blob/master/README.md for more info.
+    See https://github.com/chuyskywalker/statsd/blob/master/README.md for
+    more info.
     '''
 
     def send(self, subname, value, timestamp=None):
@@ -25,5 +26,5 @@ class Raw(statsd.Client):
         else:
             ts = timestamp
         name = self._get_name(self.name, subname)
-        self.logger.info('%s: %s %s'% (name, value, ts))
+        self.logger.info('%s: %s %s' % (name, value, ts))
         return statsd.Client._send(self, {name: '%s %s|r' % (value, ts)})
