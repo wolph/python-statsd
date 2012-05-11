@@ -21,8 +21,6 @@ import datetime
 sys.path.insert(0, os.path.abspath(os.path.pardir))
 
 import statsd
-print statsd
-print statsd.__author__
 
 # -- General configuration -----------------------------------------------------
 
