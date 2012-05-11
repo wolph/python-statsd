@@ -1,4 +1,4 @@
-statsd.timer
+statsd.raw
 ============
 
 .. automodule:: statsd.raw

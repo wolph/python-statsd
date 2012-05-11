@@ -1,4 +1,4 @@
-statsd.timer
+statsd.gauge
 ============
 
 .. automodule:: statsd.gauge
