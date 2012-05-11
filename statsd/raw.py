@@ -28,3 +28,4 @@ class Raw(statsd.Client):
         name = self._get_name(self.name, subname)
         self.logger.info('%s: %s %s' % (name, value, ts))
         return statsd.Client._send(self, {name: '%s %s|r' % (value, ts)})
+

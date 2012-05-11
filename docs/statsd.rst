@@ -10,3 +10,5 @@ Contents:
    statsd.client
    statsd.timer
    statsd.counter
+   statsd.gauge
+   statsd.raw
