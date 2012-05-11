@@ -8,7 +8,7 @@ else:
 
 setup(
     name = 'python-statsd',
-    version = '1.4.2',
+    version = '1.5.0',
     author = 'Rick van Hattem',
     author_email = 'Rick.van.Hattem@Fawo.nl',
     description = '''statsd is a client for Etsy's node-js statsd server. 
