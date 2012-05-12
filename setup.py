@@ -18,8 +18,9 @@ setup(
     packages=['statsd'],
     long_description=long_description,
     test_suite='nose.collector',
-    setup_requires=['nose'],
+    setup_requires=['nose', 'mock'],
     classifiers=[
         'License :: OSI Approved :: BSD License',
     ],
 )
+
