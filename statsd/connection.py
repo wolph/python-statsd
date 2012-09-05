@@ -54,8 +54,10 @@ class Connection(object):
             for stat, value in sampled_data.iteritems():
                 send_data = '%s:%s' % (stat, value)
                 self.udp_sock.sendto(send_data, (self._host, self._port))
+                return True
         except Exception, e:
             self.logger.exception('unexpected error %r while sending data', e)
+            return False
 
     def __repr__(self):
         return '<%s[%s:%d] P(%.1f)>' % (
