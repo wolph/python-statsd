@@ -38,8 +38,11 @@ class Counter(statsd.Client):
 
         >>> counter = Counter('application_name')
         >>> counter.increment('counter_name', 10)
+        True
         >>> counter.increment(delta=10)
+        True
         >>> counter.increment('counter_name')
+        True
         '''
         return self._send(subname, int(delta))
 
@@ -52,8 +55,11 @@ class Counter(statsd.Client):
 
         >>> counter = Counter('application_name')
         >>> counter.decrement('counter_name', 10)
+        True
         >>> counter.decrement(delta=10)
+        True
         >>> counter.decrement('counter_name')
+        True
         '''
         return self._send(subname, -int(delta))
 

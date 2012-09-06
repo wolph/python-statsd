@@ -12,6 +12,7 @@ class Timer(statsd.Client):
     >>> timer.start()
     >>>  # do something
     >>> timer.stop('executed_action')
+    True
     '''
 
     def __init__(self, name, connection=None):
