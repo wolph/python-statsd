@@ -6,7 +6,7 @@ Graphite stats collection and graphing server.
 
 * Graphite
     - http://graphite.wikidot.com
-* Statsd 
+* Statsd
     - code: https://github.com/etsy/statsd
     - blog post: http://codeascraft.etsy.com/2011/02/15/measure-anything-measure-everything/
 
@@ -30,9 +30,9 @@ Timers
 ^^^^^^
 
     >>> import statsd
-    >>> 
+    >>>
     >>> timer = statsd.Timer('MyApplication')
-    >>> 
+    >>>
     >>> timer.start()
     >>> # do something here
     >>> timer.stop('SomeTimer')
@@ -42,7 +42,7 @@ Counters
 ^^^^^^^^
 
     >>> import statsd
-    >>> 
+    >>>
     >>> counter = statsd.Counter('MyApplication')
     >>> # do something here
     >>> counter += 1
@@ -87,20 +87,20 @@ Average
     >>> average = statsd.Average('MyApplication', connection)
     >>> # do something here
     >>> average.send('SomeName', 'somekey:%d'.format(value))
-    
+
 
 Advanced Usage
 --------------
 
     >>> import statsd
-    >>> 
+    >>>
     >>> # Open a connection to `server` on port `1234` with a `50%` sample rate
     >>> statsd_connection = statsd.Connection(
     ...     host='server',
     ...     port=1234,
     ...     sample_rate=0.5,
     ... )
-    >>> 
+    >>>
     >>> # Create a client for this application
     >>> statsd_client = statsd.Client(__name__, statsd_connection)
     >>>
@@ -123,3 +123,15 @@ Advanced Usage
     ...         # do something else
     ...         timer.stop('total')
 
+If there is a need to turn *OFF* the service and avoid sending UDP messages,
+the ``Connection`` class can be disabled by enabling the disabled argument::
+
+    >>> statsd_connection = statsd.Connection(
+    ...     host='server',
+    ...     port=1234,
+    ...     sample_rate=0.5,
+    ...     disabled=True
+    ... )
+
+If logging's level is set to debug the ``Connection`` object will inform it is
+not sending UDP messages anymore.
