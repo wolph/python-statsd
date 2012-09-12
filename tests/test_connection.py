@@ -1,19 +1,8 @@
-from StringIO import StringIO
-import logging
 from unittest import TestCase
 from statsd.connection import Connection
 
 
 class TestConnection(TestCase):
-
-    def setUp(self):
-        self.stream = StringIO()
-        self.handler = logging.StreamHandler(self.stream)
-        self.log = logging.getLogger('statsd')
-        self.log.setLevel(logging.INFO)
-        for handler in self.log.handlers:
-            self.log.removeHandler(handler)
-        self.log.addHandler(self.handler)
 
     def test_set_disabled_to_false_by_default(self):
         result = Connection()
