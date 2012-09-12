@@ -9,6 +9,7 @@ class Connection(object):
     :keyword host: The statsd host to connect to, defaults to `localhost`
     :keyword port: The statsd port to connect to, defaults to `8125`
     :keyword sample_rate: The sample rate, defaults to `1` (meaning always)
+    :keyword disabled: Turn off sending UDP packets, defaults to ``False``
     '''
 
     default_host = 'localhost'
