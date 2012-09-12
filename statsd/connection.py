@@ -43,6 +43,7 @@ class Connection(object):
         communicated to `statsd` so it knows what multiplier to use.
         '''
         if self._disabled:
+            self.logger.debug('Connection disabled, not sending data')
             return False
         if sample_rate is None:
             sample_rate = self._sample_rate
