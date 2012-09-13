@@ -19,7 +19,7 @@ __all__ = [
 ]
 
 __name__ = 'python-statsd'
-__version__ = '1.5.6'
+__version__ = '1.5.7'
 __author__ = 'Rick van Hattem'
 __author_email__ = 'Rick.van.Hattem@Fawo.nl'
 __description__ = ('''statsd is a client for Etsy's node-js statsd server. '''
