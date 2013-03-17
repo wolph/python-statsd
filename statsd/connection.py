@@ -32,6 +32,7 @@ class Connection(object):
         self.logger = logging.getLogger('%s.%s'
             % (__name__, self.__class__.__name__))
         self.udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.udp_sock.connect((self._host, self._port))
         self.logger.debug('Initialized connection to %s:%d with P(%.1f)',
             self._host, self._port, self._sample_rate)
 
@@ -60,8 +61,8 @@ class Connection(object):
         try:
             for stat, value in sampled_data.iteritems():
                 send_data = '%s:%s' % (stat, value)
-                self.udp_sock.sendto(send_data, (self._host, self._port))
-                return True
+                self.udp_sock.send(send_data)
+            return True
         except Exception, e:
             self.logger.exception('unexpected error %r while sending data', e)
             return False
