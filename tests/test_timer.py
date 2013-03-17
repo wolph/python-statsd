@@ -9,6 +9,15 @@ class TestTimerDecorator(TestCase):
     def setUp(self):
         self.timer = statsd.Timer('timer')
 
+        # get time.time() to always return the same value so that this test
+        # isn't system load dependant.
+        self._time_patch = mock.patch('time.time')
+        time_time = self._time_patch.start()
+        time_time.return_value = 1
+
+    def tearDown(self):
+        self._time_patch.stop()
+
     def test_decorator_a(self):
         with mock.patch('statsd.Client') as mock_client:
             @self.timer.decorate
