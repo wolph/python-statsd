@@ -1,6 +1,20 @@
 import statsd
 
 
+# The doctests in this file, when run, will try to send data on the wire.  To
+# keep this from happening, we hook into nose's machinery to mock out
+# `Connection.send` at the beginning of testing this module, and reset it at
+# the end.
+import mock
+_connection_patch = mock.patch('statsd.Connection.send')
+def setup_module():
+  send = _connection_patch.start()
+  send.return_value = True
+ 
+def teardown_module():
+  _connection_patch.stop()
+
+
 class Counter(statsd.Client):
     '''Class to implement a statd counter
 
