@@ -5,14 +5,20 @@ import statsd
 # keep this from happening, we hook into nose's machinery to mock out
 # `Connection.send` at the beginning of testing this module, and reset it at
 # the end.
-import mock
-_connection_patch = mock.patch('statsd.Connection.send')
+_connection_patch = None
 def setup_module():
-  send = _connection_patch.start()
-  send.return_value = True
+    # Since we don't want mock to be a global requirement, we need this within
+    # the setup method.
+    import mock
+    global _connection_patch
+    _connection_patch = mock.patch('statsd.Connection.send')
+
+    send = _connection_patch.start()
+    send.return_value = True
  
 def teardown_module():
-  _connection_patch.stop()
+    assert _connection_patch
+    _connection_patch.stop()
 
 
 class Counter(statsd.Client):
