@@ -24,8 +24,8 @@ class Timer(statsd.Client):
     def start(self):
         '''Start the timer and store the start time, this can only be executed
         once per instance'''
-        assert self._start is None, ('Unable to start, the timer is already '
-            'running')
+        assert self._start is None, (
+            'Unable to start, the timer is already running')
         self._last = self._start = time.time()
 
     def send(self, subname, delta):
@@ -57,8 +57,8 @@ class Timer(statsd.Client):
         :keyword subname: The subname to report the data to (appended to the
             client name)
         '''
-        assert self._stop is None, ('Unable to stop, the timer is already '
-            'stopped')
+        assert self._stop is None, (
+            'Unable to stop, the timer is already stopped')
         self._stop = time.time()
         return self.send(subname, self._stop - self._start)
 

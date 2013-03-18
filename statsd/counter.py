@@ -6,6 +6,8 @@ import statsd
 # `Connection.send` at the beginning of testing this module, and reset it at
 # the end.
 _connection_patch = None
+
+
 def setup_module():
     # Since we don't want mock to be a global requirement, we need this within
     # the setup method.
@@ -15,7 +17,8 @@ def setup_module():
 
     send = _connection_patch.start()
     send.return_value = True
- 
+
+
 def teardown_module():
     assert _connection_patch
     _connection_patch.stop()
