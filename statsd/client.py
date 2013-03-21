@@ -22,8 +22,8 @@ class Client(object):
         if not connection:
             connection = statsd.Connection()
         self.connection = connection
-        self.logger = logging.getLogger('%s.%s'
-            % (__name__, self.__class__.__name__))
+        self.logger = logging.getLogger(
+            '%s.%s' % (__name__, self.__class__.__name__))
 
     @classmethod
     def _get_name(cls, *name_parts):

@@ -27,5 +27,5 @@ class Raw(statsd.Client):
             ts = timestamp
         name = self._get_name(self.name, subname)
         self.logger.info('%s: %s %s' % (name, value, ts))
-        return statsd.Client._send(self, {name: '%s %s|r' % (value, ts)})
+        return statsd.Client._send(self, {name: '%s|r|%s' % (value, ts)})
 

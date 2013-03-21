@@ -89,6 +89,27 @@ Average
     >>> average.send('SomeName', 'somekey:%d'.format(value))
 
 
+Connection settings
+^^^^^^^^^^^^^^^^^^^
+
+If you need some settings other than the defaults for your ``Connection``,
+you can use ``Connection.set_defaults()``.
+    
+    >>> import statsd
+    >>> statsd.Connection.set_defaults(host='localhost', port=8125, sample_rate=1, disabled=False)
+
+Every interaction with statsd after these are set will use whatever you
+specify, unless you explicitly create a different ``Connection`` to use
+(described below).
+
+Defaults:
+
+- ``host`` = ``'localhost'``
+- ``port`` = ``8125``
+- ``sample_rate`` = ``1``
+- ``disabled`` = ``False``
+
+
 Advanced Usage
 --------------
 
