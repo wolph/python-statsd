@@ -51,7 +51,8 @@ class Client(object):
             and the `name` argument is `eggs` than the resulting name will be
             `spam.eggs`
         :keyword class_: The :class:`~statsd.client.Client` subclass to use
-            (e.g. :class:`~statsd.Timer` or :class:`~statsd.counter.Counter`)
+            (e.g. :class:`~statsd.timer.Timer` or
+            :class:`~statsd.counter.Counter`)
         '''
 
         # If the name was given, use it. Otherwise simply clone
