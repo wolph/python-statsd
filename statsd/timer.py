@@ -105,7 +105,3 @@ class Timer(statsd.Client):
             return self._decorate(function_or_name.__name__, function_or_name)
 
 
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
-

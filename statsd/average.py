@@ -8,6 +8,11 @@ class Average(statsd.Client):
 
     See https://github.com/chuyskywalker/statsd/blob/master/README.md for
     more info.
+
+    >>> average = Average('application_name')
+    >>> # do something here
+    >>> average.send('subname', 123)
+    True
     '''
 
     def send(self, subname, value):

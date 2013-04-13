@@ -7,6 +7,12 @@ class Client(object):
 
     :param task_id: see :attr:`name`.
     :param task_id: see :attr:`connection`.
+
+    >>> client = Client('test')
+    >>> client
+    <Client:test@<Connection[localhost:8125] P(1.0)>>
+    >>> client.get_client(u'spam')
+    <Client:test.spam@<Connection[localhost:8125] P(1.0)>>
     '''
 
     #: The name of the client, everything sent from this client will be \
@@ -18,7 +24,7 @@ class Client(object):
     connection = None
 
     def __init__(self, name, connection=None):
-        self.name = name
+        self.name = self._get_name(name)
         if not connection:
             connection = statsd.Connection()
         self.connection = connection

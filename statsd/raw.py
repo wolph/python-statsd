@@ -12,6 +12,13 @@ class Raw(statsd.Client):
 
     See https://github.com/chuyskywalker/statsd/blob/master/README.md for
     more info.
+
+    >>> raw = Raw('test')
+    >>> raw.send('name', 12435)
+    True
+    >>> import time
+    >>> raw.send('name', 12435, time.time())
+    True
     '''
 
     def send(self, subname, value, timestamp=None):

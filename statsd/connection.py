@@ -13,11 +13,8 @@ class Connection(object):
     '''
 
     default_host = 'localhost'
-
     default_port = 8125
-
     default_sample_rate = 1
-
     default_disabled = False
 
     @classmethod
