@@ -20,7 +20,8 @@ class TestConnection(unittest.TestCase):
     def test_send_returns_true_if_enabled(self, mock_class):
         connection = statsd.connection.Connection()
         assert connection.send({'data': True}) is True
-        assert connection.send({'test:1|c': True}, 0.9999)
+        assert connection.send({'test:1|c': True}, 0.99999999)
+        assert connection.send({'test:1|c': True}, 0.00000001)
         assert connection.send({'data': True}, 1) is True
 
     def test_send_exception(self, mock_class=None):
