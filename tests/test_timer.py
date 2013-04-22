@@ -13,63 +13,87 @@ class TestTimerDecorator(TestCase):
         # isn't system load dependant.
         self._time_patch = mock.patch('time.time')
         time_time = self._time_patch.start()
-        time_time.return_value = 1
+        def generator():
+            i = 0.0
+            while True:
+                i += 0.1234
+                yield i
+        time_time.side_effect = generator()
 
     def tearDown(self):
         self._time_patch.stop()
 
-    def test_decorator_a(self):
-        with mock.patch('statsd.Client') as mock_client:
-            @self.timer.decorate
-            def a():
-                pass
-            a()
-        mock_client._send.assert_called_with(mock.ANY, {'timer.a': '0|ms'})
+    def get_time(self, mock_client, key):
+        return float(self.get_arg(mock_client, key).split('|')[0])
+    
+    def get_arg(self, mock_client, key):
+        return mock_client._send.call_args[0][1][key]
 
-    def test_decorator_named_spam(self):
-        with mock.patch('statsd.Client') as mock_client:
-            @self.timer.decorate('spam')
-            def a():
-                pass
-            a()
-        mock_client._send.assert_called_with(mock.ANY, {'timer.spam': '0|ms'})
+    @mock.patch('statsd.Client')
+    def test_decorator_a(self, mock_client):
+        @self.timer.decorate
+        def a():
+            pass
 
-    def test_nested_naming_decorator(self):
-        with mock.patch('statsd.Client') as mock_client:
-            timer = self.timer.get_client('eggs0')
-            @timer.decorate('d0')
-            def a():
-                pass
-            a()
-        mock_client._send.assert_called_with(mock.ANY, {'timer.eggs0.d0': '0|ms'})
+        a()
 
+        assert self.get_time(mock_client, 'timer.a') == 123.4, \
+            'This test must execute within 2ms'
+
+    @mock.patch('statsd.Client')
+    def test_decorator_named_spam(self, mock_client):
+        @self.timer.decorate('spam')
+        def a():
+            pass
+        a()
+
+        assert self.get_time(mock_client, 'timer.spam') == 123.4, \
+            'This test must execute within 2ms'
+
+    @mock.patch('statsd.Client')
+    def test_nested_naming_decorator(self, mock_client):
+        timer = self.timer.get_client('eggs0')
+        @timer.decorate('d0')
+        def a():
+            pass
+        a()
+
+        assert self.get_time(mock_client, 'timer.eggs0.d0') == 123.4, \
+            'This test must execute within 2ms'
 
 class TestTimerAdvancedUsage(TestTimerDecorator):
 
-    def test_timer_total(self):
-        with mock.patch('statsd.Client') as mock_client:
-            timer4 = statsd.Timer('timer4')
-            timer4.start()
-            timer4.stop()
-            mock_client._send.assert_called_with(mock.ANY, {'timer4.total': '0|ms'})
+    @mock.patch('statsd.Client')
+    def test_timer_total(self, mock_client):
+        timer4 = statsd.Timer('timer4')
+        timer4.start()
+        timer4.stop()
+        assert self.get_time(mock_client, 'timer4.total') == 123.4, \
+            'This test must execute within 2ms'
 
-            timer5 = statsd.Timer('timer5')
-            timer5.start()
-            timer5.stop('test')
-            mock_client._send.assert_called_with(mock.ANY, {'timer5.test': '0|ms'})
+        timer5 = statsd.Timer('timer5')
+        timer5.start()
+        timer5.stop('test')
+        assert self.get_time(mock_client, 'timer5.test') == 123.4, \
+            'This test must execute within 2ms'
 
-    def test_timer_intermediate(self):
-        with mock.patch('statsd.Client') as mock_client:
-            timer6 = statsd.Timer('timer6')
-            timer6.start()
-            timer6.intermediate('extras')
-            mock_client._send.assert_called_with(mock.ANY, {'timer6.extras': '0|ms'})
-            timer6.stop()
-            mock_client._send.assert_called_with(mock.ANY, {'timer6.total': '0|ms'})
+    @mock.patch('statsd.Client')
+    def test_timer_intermediate(self, mock_client):
+        timer6 = statsd.Timer('timer6')
+        timer6.start()
+        timer6.intermediate('extras')
+        assert self.get_time(mock_client, 'timer6.extras') == 123.4, \
+            'This test must execute within 2ms'
+        timer6.stop()
+        assert self.get_time(mock_client, 'timer6.total') == 370.2, \
+            'This test must execute within 2ms'
 
-            timer7 = statsd.Timer('timer7')
-            timer7.start()
-            timer7.intermediate('extras')
-            mock_client._send.assert_called_with(mock.ANY, {'timer7.extras': '0|ms'})
-            timer7.stop('test')
-            mock_client._send.assert_called_with(mock.ANY, {'timer7.test': '0|ms'})
+        timer7 = statsd.Timer('timer7')
+        timer7.start()
+        timer7.intermediate('extras')
+        assert self.get_time(mock_client, 'timer7.extras') == 123.4, \
+            'This test must execute within 2ms'
+        timer7.stop('test')
+        assert self.get_time(mock_client, 'timer7.test') == 370.2, \
+            'This test must execute within 2ms'
+

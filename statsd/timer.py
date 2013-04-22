@@ -37,8 +37,8 @@ class Timer(statsd.Client):
         '''
         ms = delta * 1000
         name = self._get_name(self.name, subname)
-        self.logger.info('%s: %dms', name, ms)
-        return statsd.Client._send(self, {name: '%d|ms' % ms})
+        self.logger.info('%s: %0.08fms', name, ms)
+        return statsd.Client._send(self, {name: '%0.08f|ms' % ms})
 
     def intermediate(self, subname):
         '''Send the time that has passed since our last measurement
