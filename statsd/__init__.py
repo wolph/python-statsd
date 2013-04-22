@@ -19,7 +19,7 @@ __all__ = [
 ]
 
 __name__ = 'python-statsd'
-__version__ = '1.5.8'
+__version__ = '1.6.0'
 __author__ = 'Rick van Hattem'
 __author_email__ = 'Rick.van.Hattem@Fawo.nl'
 __description__ = (
