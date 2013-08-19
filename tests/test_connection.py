@@ -1,7 +1,6 @@
 import mock
 import statsd
 import unittest
-from nose import tools
 
 class ConnectionException(Exception):
     pass

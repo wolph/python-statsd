@@ -18,7 +18,7 @@ __all__ = [
     'decrement',
 ]
 
-__name__ = 'python-statsd'
+__package_name__ = 'python-statsd'
 __version__ = '1.6.0'
 __author__ = 'Rick van Hattem'
 __author_email__ = 'Rick.van.Hattem@Fawo.nl'

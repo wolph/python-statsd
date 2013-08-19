@@ -8,7 +8,7 @@ else:
     long_description = 'See http://pypi.python.org/pypi/python-statsd/'
 
 setup(
-    name=statsd.__name__,
+    name=statsd.__package_name__,
     version=statsd.__version__,
     author=statsd.__author__,
     author_email=statsd.__author_email__,

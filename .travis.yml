@@ -11,6 +11,7 @@ install:
 # command to run tests
 script:
     - python setup.py nosetests
+    - nosetests --with-coverage
 
 after_success:
     - coveralls

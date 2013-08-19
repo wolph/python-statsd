@@ -48,7 +48,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = statsd.__name__.capitalize()
+project = statsd.__package_name__.capitalize()
 copyright = '%s, %s' % (
     datetime.date.today().year,
     statsd.__author__,
