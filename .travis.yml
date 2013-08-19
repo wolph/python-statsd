@@ -6,8 +6,13 @@ python:
 # command to install dependencies
 install:
     - pip install . --use-mirrors
+    - pip install coveralls --use-mirrors
 
 # command to run tests
 script:
     - python setup.py nosetests
+    - nosetests --with-coverage
+
+after_success:
+    - coveralls
 
