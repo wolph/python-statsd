@@ -3,5 +3,6 @@ build
 dist
 *.egg-info
 *.egg
-.tox
-
+.*
+cover
+docs/_build
