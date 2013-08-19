@@ -1,7 +1,9 @@
 Introduction
 ============
 
-.. image:: https://travis-ci.org/WoLpH/python-statsd.png?branch=master :target: https://travis-ci.org/WoLpH/python-statsd
+.. image:: https://travis-ci.org/WoLpH/python-statsd.png?branch=master
+
+.. image:: https://coveralls.io/repos/WoLpH/python-statsd/badge.png?branch=master
 
 `statsd` is a client for Etsy's statsd server, a front end/proxy for the
 Graphite stats collection and graphing server.
