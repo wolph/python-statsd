@@ -1,0 +1,11 @@
+[run]
+branch = True
+source =
+    statsd
+    tests
+omit =
+    */mock/*
+    */nose/*
+[paths]
+source =
+    statsd

@@ -1,3 +1,0 @@
-[run]
-source = statsd,tests
-omit = */nose/*
