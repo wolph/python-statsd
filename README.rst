@@ -21,19 +21,19 @@ Graphite stats collection and graphing server.
 
 
 Install
-=======
+-------
 
 To install simply execute `python setup.py install`.
 If you want to run the tests first, run `python setup.py nosetests`
 
 
 Usage
-=====
+-----
 
 To get started real quick, just try something like this:
 
 Basic Usage
------------
+~~~~~~~~~~~
 
 Timers
 ^^^^^^
