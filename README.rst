@@ -1,15 +1,13 @@
 Introduction
 ============
 
-Travis status:
-
 .. image:: https://travis-ci.org/WoLpH/python-statsd.png?branch=master
-  :target: https://travis-ci.org/WoLpH/python-statsd
-
-Coverage:
+    :alt: Test Status
+    :target: https://travis-ci.org/WoLpH/python-statsd
 
 .. image:: https://coveralls.io/repos/WoLpH/python-statsd/badge.png?branch=master
-  :target: https://coveralls.io/r/WoLpH/python-statsd?branch=master
+    :alt: Coverage Status
+    :target: https://coveralls.io/r/WoLpH/python-statsd?branch=master
 
 `statsd` is a client for Etsy's statsd server, a front end/proxy for the
 Graphite stats collection and graphing server.
@@ -22,19 +20,19 @@ Graphite stats collection and graphing server.
 
 
 Install
-=======
+-------
 
 To install simply execute `python setup.py install`.
 If you want to run the tests first, run `python setup.py nosetests`
 
 
 Usage
-=====
+-----
 
 To get started real quick, just try something like this:
 
 Basic Usage
------------
+~~~~~~~~~~~
 
 Timers
 ^^^^^^
