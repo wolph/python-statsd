@@ -1,13 +1,13 @@
 import os
 import statsd
-from setuptools import setup
+import setuptools
 
 if os.path.isfile('README.rst'):
     long_description = open('README.rst').read()
 else:
     long_description = 'See http://pypi.python.org/pypi/python-statsd/'
 
-setup(
+setuptools.setup(
     name=statsd.__package_name__,
     version=statsd.__version__,
     author=statsd.__author__,
@@ -15,7 +15,7 @@ setup(
     description=statsd.__description__,
     url=statsd.__url__,
     license='BSD',
-    packages=['statsd'],
+    packages=setuptools.find_packages(),
     long_description=long_description,
     test_suite='nose.collector',
     setup_requires=['nose', 'mock', 'coverage'],
