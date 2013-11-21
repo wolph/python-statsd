@@ -18,7 +18,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     long_description=long_description,
     test_suite='nose.collector',
-    tests_requires=['nose', 'mock', 'coverage'],
+    tests_require=['nose', 'mock', 'coverage'],
     classifiers=[
         'License :: OSI Approved :: BSD License',
     ],
