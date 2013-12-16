@@ -1,6 +1,8 @@
 import logging
 import statsd
 
+from . import compat
+
 
 class Client(object):
     '''Statsd Client Object
@@ -33,13 +35,7 @@ class Client(object):
 
     @classmethod
     def _get_name(cls, *name_parts):
-
-        def to_str(value):
-            if isinstance(value, unicode):
-                value = value.encode('utf-8', 'replace')
-            return value
-
-        name_parts = [to_str(x) for x in name_parts if x]
+        name_parts = [compat.to_str(x) for x in name_parts if x]
         return '.'.join(name_parts)
 
     def get_client(self, name=None, class_=None):
