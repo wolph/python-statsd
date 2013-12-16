@@ -11,8 +11,8 @@ install:
 
 # command to run tests
 script:
-    - python setup.py nosetests
-    - nosetests --with-coverage
+    - python setup.py nosetests --cover-erase --with-coverage
+    - nosetests --with-coverage --cover-min-percentage=100
 
 after_success:
     - coveralls
