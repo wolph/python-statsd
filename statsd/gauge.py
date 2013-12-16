@@ -1,5 +1,6 @@
 import statsd
-import decimal
+
+from . import compat
 
 
 class Gauge(statsd.Client):
@@ -14,7 +15,7 @@ class Gauge(statsd.Client):
             client name)
         :keyword value: The gauge value to send
         '''
-        assert isinstance(value, (int, long, float, decimal.Decimal))
+        assert isinstance(value, compat.NUM_TYPES)
         name = self._get_name(self.name, subname)
         self.logger.info('%s: %s', name, value)
         return statsd.Client._send(self, {name: '%s|g' % value})
