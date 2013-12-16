@@ -92,8 +92,6 @@ class TestTimerContextManager(TestCase):
         with timer.time():
             pass
 
-        print mock_client._send.call_args[0][1]
-
         assert self.get_time(mock_client, 'cm.default') == 123.4, \
             'This test must execute within 2ms'
 
