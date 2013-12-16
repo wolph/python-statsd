@@ -99,9 +99,9 @@ class Timer(statsd.Client):
         ...     pass
 
         '''
-        if isinstance(function_or_name, basestring):
-            return lambda f: self._decorate(function_or_name, f)
-        else:
+        if callable(function_or_name):
             return self._decorate(function_or_name.__name__, function_or_name)
+        else:
+            return lambda f: self._decorate(function_or_name, f)
 
 
