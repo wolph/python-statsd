@@ -25,7 +25,7 @@ class TestTimerDecorator(TestCase):
 
     def get_time(self, mock_client, key):
         return float(self.get_arg(mock_client, key).split('|')[0])
-    
+
     def get_arg(self, mock_client, key):
         return mock_client._send.call_args[0][1][key]
 
@@ -92,8 +92,6 @@ class TestTimerContextManager(TestCase):
         with timer.time():
             pass
 
-        print mock_client._send.call_args[0][1]
-
         assert self.get_time(mock_client, 'cm.default') == 123.4, \
             'This test must execute within 2ms'
 
@@ -105,6 +103,16 @@ class TestTimerContextManager(TestCase):
 
         assert self.get_time(mock_client, 'cm.named.name') == 123.4, \
             'This test must execute within 2ms'
+
+    @mock.patch('statsd.Client')
+    def test_context_manager_class(self, mock_client):
+        timer = self.timer.get_client('named')
+        with timer.time(class_=statsd.Timer):
+            pass
+
+        assert self.get_time(mock_client, 'cm.named') == 123.4, \
+            'This test must execute within 2ms'
+
 
 class TestTimerAdvancedUsage(TestTimerDecorator):
 

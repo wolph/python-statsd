@@ -14,7 +14,7 @@ def iter_dict(dict):
 
 
 def to_str(value):
-    if PY3K and isinstance(value, bytes):
+    if PY3K and isinstance(value, bytes):  # pragma: no cover
         value = value.encode('utf-8', 'replace')
     elif not PY3K and isinstance(value, unicode):
         value = value.encode('utf-8', 'replace')
