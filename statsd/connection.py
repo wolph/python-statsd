@@ -2,6 +2,8 @@ import logging
 import socket
 import random
 
+from . import compat
+
 
 class Connection(object):
     '''Statsd Connection
@@ -55,17 +57,17 @@ class Connection(object):
         if sample_rate < 1:
             if random.random() <= sample_rate:
                 # Modify the data so statsd knows our sample_rate
-                for stat, value in data.iteritems():
+                for stat, value in compat.iter_dict(data):
                     sampled_data[stat] = '%s|@%s' % (data[stat], sample_rate)
         else:
             sampled_data = data
 
         try:
-            for stat, value in sampled_data.iteritems():
-                send_data = '%s:%s' % (stat, value)
+            for stat, value in compat.iter_dict(sampled_data):
+                send_data = ('%s:%s' % (stat, value)).encode("utf-8")
                 self.udp_sock.send(send_data)
             return True
-        except Exception, e:
+        except Exception as e:
             self.logger.exception('unexpected error %r while sending data', e)
             return False
 
