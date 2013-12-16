@@ -6,21 +6,21 @@ import decimal
 
 PY3K = sys.version_info >= (3, 0)
 
-def iter_dict(dict):
+def iter_dict(dict):  # pragma: no cover
     if PY3K:
         return dict.items()
     else:
         return dict.iteritems()
 
 
-def to_str(value):
-    if PY3K and isinstance(value, bytes):  # pragma: no cover
+def to_str(value):  # pragma: no cover
+    if PY3K and isinstance(value, bytes):
         value = value.encode('utf-8', 'replace')
     elif not PY3K and isinstance(value, unicode):
         value = value.encode('utf-8', 'replace')
     return value
 
-if PY3K:
+if PY3K:  # pragma: no cover
     NUM_TYPES = int, float, decimal.Decimal
-else:
+else:  # pragma: no cover
     NUM_TYPES = int, long, float, decimal.Decimal
