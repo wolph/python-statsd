@@ -61,6 +61,51 @@ class TestTimerDecorator(TestCase):
         assert self.get_time(mock_client, 'timer.eggs0.d0') == 123.4, \
             'This test must execute within 2ms'
 
+class TestTimerContextManager(TestCase):
+
+    def setUp(self):
+        self.timer = statsd.Timer('cm')
+
+        # get time.time() to always return the same value so that this test
+        # isn't system load dependant.
+        self._time_patch = mock.patch('time.time')
+        time_time = self._time_patch.start()
+        def generator():
+            i = 0.0
+            while True:
+                i += 0.1234
+                yield i
+        time_time.side_effect = generator()
+
+    def tearDown(self):
+        self._time_patch.stop()
+
+    def get_time(self, mock_client, key):
+        return float(self.get_arg(mock_client, key).split('|')[0])
+
+    def get_arg(self, mock_client, key):
+        return mock_client._send.call_args[0][1][key]
+
+    @mock.patch('statsd.Client')
+    def test_context_manager_default(self, mock_client):
+        timer = self.timer.get_client('default')
+        with timer.time():
+            pass
+
+        print mock_client._send.call_args[0][1]
+
+        assert self.get_time(mock_client, 'cm.default') == 123.4, \
+            'This test must execute within 2ms'
+
+    @mock.patch('statsd.Client')
+    def test_context_manager_named(self, mock_client):
+        timer = self.timer.get_client('named')
+        with timer.time('name'):
+            pass
+
+        assert self.get_time(mock_client, 'cm.named.name') == 123.4, \
+            'This test must execute within 2ms'
+
 class TestTimerAdvancedUsage(TestTimerDecorator):
 
     @mock.patch('statsd.Client')
