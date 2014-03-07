@@ -37,9 +37,13 @@ class Timer(statsd.Client):
         :keyword delta: The time delta (time.time() - time.time()) to report
         '''
         ms = delta * 1000
-        name = self._get_name(self.name, subname)
-        self.logger.info('%s: %0.08fms', name, ms)
-        return statsd.Client._send(self, {name: '%0.08f|ms' % ms})
+        
+        if ms > 0:
+            name = self._get_name(self.name, subname)
+            self.logger.info('%s: %0.08fms', name, ms)
+            return statsd.Client._send(self, {name: '%0.08f|ms' % ms})
+        else:
+            return True
 
     def intermediate(self, subname):
         '''Send the time that has passed since our last measurement
