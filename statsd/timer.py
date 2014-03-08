@@ -99,7 +99,7 @@ class Timer(statsd.Client):
         ...     pass
         >>>
         >>> @timer.decorate('my_timer')
-        ... def some_function():
+        ... def some_other_function():
         ...     # resulting timer name: application_name.my_timer
         ...     pass
 

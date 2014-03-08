@@ -6,11 +6,11 @@ import decimal
 
 PY3K = sys.version_info >= (3, 0)
 
-def iter_dict(dict):  # pragma: no cover
+def iter_dict(dict_):  # pragma: no cover
     if PY3K:
-        return dict.items()
+        return dict_.items()
     else:
-        return dict.iteritems()
+        return dict_.iteritems()
 
 
 def to_str(value):  # pragma: no cover
