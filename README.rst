@@ -9,6 +9,14 @@ Introduction
     :alt: Coverage Status
     :target: https://coveralls.io/r/WoLpH/python-statsd?branch=master
 
+.. image:: https://landscape.io/github/WoLpH/python-statsd/master/landscape.png
+   :target: https://landscape.io/github/WoLpH/python-statsd/master
+   :alt: Code Health
+
+.. image:: https://requires.io/github/WoLpH/python-statsd/requirements.png?branch=master
+   :target: https://requires.io/github/WoLpH/python-statsd/requirements/?branch=master
+   :alt: Requirements Status
+
 `statsd` is a client for Etsy's statsd server, a front end/proxy for the
 Graphite stats collection and graphing server.
 
