@@ -37,7 +37,7 @@ class Timer(statsd.Client):
         :keyword delta: The time delta (time.time() - time.time()) to report
         '''
         ms = delta * 1000
-        
+
         if ms > 0:
             name = self._get_name(self.name, subname)
             self.logger.info('%s: %0.08fms', name, ms)

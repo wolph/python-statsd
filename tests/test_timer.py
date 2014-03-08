@@ -4,22 +4,7 @@ import mock
 import statsd
 
 
-class TestTimerDecorator(TestCase):
-
-    def setUp(self):
-        self.timer = statsd.Timer('timer')
-
-        # get time.time() to always return the same value so that this test
-        # isn't system load dependant.
-        self._time_patch = mock.patch('time.time')
-        time_time = self._time_patch.start()
-        def generator():
-            i = 0.0
-            while True:
-                i += 0.1234
-                yield i
-        time_time.side_effect = generator()
-
+class TestTimerBase(TestCase):
     def tearDown(self):
         self._time_patch.stop()
 
@@ -28,6 +13,23 @@ class TestTimerDecorator(TestCase):
 
     def get_arg(self, mock_client, key):
         return mock_client._send.call_args[0][1][key]
+
+
+class TestTimerDecorator(TestTimerBase):
+    def setUp(self):
+        self.timer = statsd.Timer('timer')
+
+        # get time.time() to always return the same value so that this test
+        # isn't system load dependant.
+        self._time_patch = mock.patch('time.time')
+        time_time = self._time_patch.start()
+
+        def generator():
+            i = 0.0
+            while True:
+                i += 0.1234
+                yield i
+        time_time.side_effect = generator()
 
     @mock.patch('statsd.Client')
     def test_decorator_a(self, mock_client):
@@ -53,6 +55,7 @@ class TestTimerDecorator(TestCase):
     @mock.patch('statsd.Client')
     def test_nested_naming_decorator(self, mock_client):
         timer = self.timer.get_client('eggs0')
+
         @timer.decorate('d0')
         def a():
             pass
@@ -61,7 +64,8 @@ class TestTimerDecorator(TestCase):
         assert self.get_time(mock_client, 'timer.eggs0.d0') == 123.4, \
             'This test must execute within 2ms'
 
-class TestTimerContextManager(TestCase):
+
+class TestTimerContextManager(TestTimerBase):
 
     def setUp(self):
         self.timer = statsd.Timer('cm')
@@ -70,21 +74,13 @@ class TestTimerContextManager(TestCase):
         # isn't system load dependant.
         self._time_patch = mock.patch('time.time')
         time_time = self._time_patch.start()
+
         def generator():
             i = 0.0
             while True:
                 i += 0.1234
                 yield i
         time_time.side_effect = generator()
-
-    def tearDown(self):
-        self._time_patch.stop()
-
-    def get_time(self, mock_client, key):
-        return float(self.get_arg(mock_client, key).split('|')[0])
-
-    def get_arg(self, mock_client, key):
-        return mock_client._send.call_args[0][1][key]
 
     @mock.patch('statsd.Client')
     def test_context_manager_default(self, mock_client):
@@ -149,4 +145,36 @@ class TestTimerAdvancedUsage(TestTimerDecorator):
         timer7.stop('test')
         assert self.get_time(mock_client, 'timer7.test') == 370.2, \
             'This test must execute within 2ms'
+
+
+class TestTimerZero(TestTimerBase):
+    def setUp(self):
+        self.timer = statsd.Timer('timer')
+
+        # get time.time() to always return the same value so that this test
+        # isn't system load dependant.
+        self._time_patch = mock.patch('time.time')
+        time_time = self._time_patch.start()
+
+        def generator():
+            while True:
+                yield 0
+        time_time.side_effect = generator()
+
+    def tearDown(self):
+        self._time_patch.stop()
+
+    @mock.patch('statsd.Client')
+    def test_timer_zero(self, mock_client):
+        timer4 = statsd.Timer('timer5')
+        timer4.start()
+        timer4.stop()
+        assert mock_client._send.call_args is None, \
+            '0 timings shouldnt be sent'
+
+        timer5 = statsd.Timer('timer5')
+        timer5.start()
+        timer5.stop('test')
+        assert mock_client._send.call_args is None, \
+            '0 timings shouldnt be sent'
 
