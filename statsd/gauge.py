@@ -13,6 +13,7 @@ class Gauge(statsd.Client):
 
         :keyword subname: The subname to report the data to (appended to the
             client name)
+        :type subname: str
         :keyword value: The gauge value to send
         '''
         assert isinstance(value, compat.NUM_TYPES)

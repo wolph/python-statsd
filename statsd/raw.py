@@ -26,6 +26,7 @@ class Raw(statsd.Client):
 
         :keyword subname: The subname to report the data to (appended to the
             client name)
+        :type subname: str
         :keyword value: The raw value to send
         '''
         if timestamp is None:

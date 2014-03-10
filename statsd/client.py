@@ -7,8 +7,11 @@ from . import compat
 class Client(object):
     '''Statsd Client Object
 
-    :param task_id: see :attr:`name`.
-    :param task_id: see :attr:`connection`.
+    :keyword name: The name for this client
+    :type name: str
+    :keyword connection: The connection to use, will be automatically created if
+        not given
+    :type connection: :class:`~statsd.connection.Connection`
 
     >>> client = Client('test')
     >>> client
@@ -46,9 +49,11 @@ class Client(object):
         :keyword name: The name to use, if the name for this client was `spam`
             and the `name` argument is `eggs` than the resulting name will be
             `spam.eggs`
+        :type name: str
         :keyword class_: The :class:`~statsd.client.Client` subclass to use
             (e.g. :class:`~statsd.timer.Timer` or
             :class:`~statsd.counter.Counter`)
+        :type class_: :class:`~statsd.client.Client`
         '''
 
         # If the name was given, use it. Otherwise simply clone

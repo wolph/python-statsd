@@ -4,10 +4,20 @@ import statsd
 
 
 class Timer(statsd.Client):
-    '''Statsd Timer Object
+    '''
+    Statsd Timer Object
 
-    Additional documentation is available at the
-    parent class :class:`~statsd.client.Client`
+    Additional documentation is available at the parent class
+    :class:`~statsd.client.Client`
+
+    :keyword name: The name for this timer
+    :type name: str
+    :keyword connection: The connection to use, will be automatically created if
+        not given
+    :type connection: :class:`~statsd.connection.Connection`
+    :keyword min_send_threshold: Timings smaller than this will not be sent so -1
+        can be used for all.
+    :type min_send_threshold: int
 
     >>> timer = Timer('application_name')
     >>> timer.start()
@@ -53,6 +63,7 @@ class Timer(statsd.Client):
 
         :keyword subname: The subname to report the data to (appended to the
             client name)
+        :type subname: str
         '''
         t = time.time()
         response = self.send(subname, t - self._last)
@@ -64,6 +75,7 @@ class Timer(statsd.Client):
 
         :keyword subname: The subname to report the data to (appended to the
             client name)
+        :type subname: str
         '''
         assert self._stop is None, (
             'Unable to stop, the timer is already stopped')
@@ -117,7 +129,11 @@ class Timer(statsd.Client):
         '''Returns a context manager to time execution of a block of code.
 
         :keyword subname: The subname to report data to
-        :keyword class_: The class to use as a client
+        :type subname: str
+        :keyword class_: The :class:`~statsd.client.Client` subclass to use
+            (e.g. :class:`~statsd.timer.Timer` or
+            :class:`~statsd.counter.Counter`)
+        :type class_: :class:`~statsd.client.Client`
 
         >>> from statsd import Timer
         >>> timer = Timer('application_name')

@@ -9,9 +9,13 @@ class Connection(object):
     '''Statsd Connection
 
     :keyword host: The statsd host to connect to, defaults to `localhost`
+    :type host: str
     :keyword port: The statsd port to connect to, defaults to `8125`
+    :type port: int
     :keyword sample_rate: The sample rate, defaults to `1` (meaning always)
+    :type sample_rate: int
     :keyword disabled: Turn off sending UDP packets, defaults to ``False``
+    :type disabled: bool
     '''
 
     default_host = 'localhost'
@@ -46,6 +50,11 @@ class Connection(object):
         The sample rate should be a number between `0` and `1` which indicates
         the probability that a message will be sent. The sample_rate is also
         communicated to `statsd` so it knows what multiplier to use.
+
+        :keyword data: The data to send
+        :type data: dict
+        :keyword sample_rate: The sample rate, defaults to `1` (meaning always)
+        :type sample_rate: int
         '''
         if self._disabled:
             self.logger.debug('Connection disabled, not sending data')
