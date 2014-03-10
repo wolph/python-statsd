@@ -16,11 +16,12 @@ class Timer(statsd.Client):
     True
     '''
 
-    def __init__(self, name, connection=None):
+    def __init__(self, name, connection=None, min_send_threshold=0):
         super(Timer, self).__init__(name, connection=connection)
         self._start = None
         self._last = None
         self._stop = None
+        self.min_send_threshold = min_send_threshold
 
     def start(self):
         '''Start the timer and store the start time, this can only be executed
@@ -34,11 +35,13 @@ class Timer(statsd.Client):
 
         :keyword subname: The subname to report the data to (appended to the
             client name)
+        :type subname: str
         :keyword delta: The time delta (time.time() - time.time()) to report
+        :type delta: float
         '''
         ms = delta * 1000
 
-        if ms > 0:
+        if ms > self.min_send_threshold:
             name = self._get_name(self.name, subname)
             self.logger.info('%s: %0.08fms', name, ms)
             return statsd.Client._send(self, {name: '%0.08f|ms' % ms})
