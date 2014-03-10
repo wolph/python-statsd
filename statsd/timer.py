@@ -26,7 +26,7 @@ class Timer(statsd.Client):
     True
     '''
 
-    def __init__(self, name, connection=None, min_send_threshold=0):
+    def __init__(self, name, connection=None, min_send_threshold=-1):
         super(Timer, self).__init__(name, connection=connection)
         self._start = None
         self._last = None
@@ -50,7 +50,6 @@ class Timer(statsd.Client):
         :type delta: float
         '''
         ms = delta * 1000
-
         if ms > self.min_send_threshold:
             name = self._get_name(self.name, subname)
             self.logger.info('%s: %0.08fms', name, ms)

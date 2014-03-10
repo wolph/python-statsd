@@ -149,8 +149,6 @@ class TestTimerAdvancedUsage(TestTimerDecorator):
 
 class TestTimerZero(TestTimerBase):
     def setUp(self):
-        self.timer = statsd.Timer('timer')
-
         # get time.time() to always return the same value so that this test
         # isn't system load dependant.
         self._time_patch = mock.patch('time.time')
@@ -166,15 +164,15 @@ class TestTimerZero(TestTimerBase):
 
     @mock.patch('statsd.Client')
     def test_timer_zero(self, mock_client):
-        timer4 = statsd.Timer('timer5')
-        timer4.start()
-        timer4.stop()
+        timer8 = statsd.Timer('timer8', min_send_threshold=0)
+        timer8.start()
+        timer8.stop()
         assert mock_client._send.call_args is None, \
             '0 timings shouldnt be sent'
 
-        timer5 = statsd.Timer('timer5')
-        timer5.start()
-        timer5.stop('test')
+        timer9 = statsd.Timer('timer9', min_send_threshold=0)
+        timer9.start()
+        timer9.stop('test')
         assert mock_client._send.call_args is None, \
             '0 timings shouldnt be sent'
 
