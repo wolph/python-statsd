@@ -78,6 +78,9 @@ class Gauge(statsd.Client):
 
         :keyword delta: The delta to add to the gauge
         :type delta: int
+
+        >>> gauge = Gauge('application_name')
+        >>> gauge += 5
         '''
         self.increment(delta=delta)
         return self
@@ -87,6 +90,9 @@ class Gauge(statsd.Client):
 
         :keyword delta: The delta to remove from the gauge
         :type delta: int
+
+        >>> gauge = Gauge('application_name')
+        >>> gauge -= 5
         '''
         self.decrement(delta=delta)
         return self
