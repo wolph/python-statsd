@@ -19,8 +19,7 @@ class Timer(statsd.Client):
         can be used for all.
     :type min_send_threshold: int
 
-    >>> timer = Timer('application_name')
-    >>> timer.start()
+    >>> timer = Timer('application_name').start()
     >>>  # do something
     >>> timer.stop('executed_action')
     True
@@ -35,10 +34,15 @@ class Timer(statsd.Client):
 
     def start(self):
         '''Start the timer and store the start time, this can only be executed
-        once per instance'''
+        once per instance
+
+        It returns the timer instance so it can be chained when instantiating
+        the timer instance like this:
+        ``timer = Timer('application_name').start()``'''
         assert self._start is None, (
             'Unable to start, the timer is already running')
         self._last = self._start = time.time()
+        return self
 
     def send(self, subname, delta):
         '''Send the data to statsd via self.connection
