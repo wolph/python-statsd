@@ -68,6 +68,46 @@ class Client(object):
             connection=self.connection,
         )
 
+    def get_average(self, name=None):
+        '''Shortcut for getting an :class:`~statsd.average.Average` instance
+
+        :keyword name: See :func:`~statsd.client.Client.get_client`
+        :type name: str
+        '''
+        return self.get_client(name=name, class_=statsd.Average)
+
+    def get_counter(self, name=None):
+        '''Shortcut for getting a :class:`~statsd.counter.Counter` instance
+
+        :keyword name: See :func:`~statsd.client.Client.get_client`
+        :type name: str
+        '''
+        return self.get_client(name=name, class_=statsd.Counter)
+
+    def get_gauge(self, name=None):
+        '''Shortcut for getting a :class:`~statsd.gauge.Gauge` instance
+
+        :keyword name: See :func:`~statsd.client.Client.get_client`
+        :type name: str
+        '''
+        return self.get_client(name=name, class_=statsd.Gauge)
+
+    def get_raw(self, name=None):
+        '''Shortcut for getting a :class:`~statsd.raw.Raw` instance
+
+        :keyword name: See :func:`~statsd.client.Client.get_client`
+        :type name: str
+        '''
+        return self.get_client(name=name, class_=statsd.Raw)
+
+    def get_timer(self, name=None):
+        '''Shortcut for getting a :class:`~statsd.timer.Timer` instance
+
+        :keyword name: See :func:`~statsd.client.Client.get_client`
+        :type name: str
+        '''
+        return self.get_client(name=name, class_=statsd.Timer)
+
     def __repr__(self):
         return '<%s:%s@%r>' % (
             self.__class__.__name__,
