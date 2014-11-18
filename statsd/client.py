@@ -16,7 +16,7 @@ class Client(object):
     >>> client = Client('test')
     >>> client
     <Client:test@<Connection[localhost:8125] P(1.0)>>
-    >>> client.get_client(u'spam')
+    >>> client.get_client('spam')
     <Client:test.spam@<Connection[localhost:8125] P(1.0)>>
     '''
 
