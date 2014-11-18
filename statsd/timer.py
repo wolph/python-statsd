@@ -96,7 +96,6 @@ class Timer(statsd.Client):
             finally:
                 # Stop the timer, send the message and cleanup
                 timer.stop('')
-                del timer
 
         return _decorator
 
