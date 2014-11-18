@@ -80,6 +80,12 @@ class Connection(object):
             self.logger.exception('unexpected error %r while sending data', e)
             return False
 
+    def __del__(self):
+        '''
+        We close UDP socket connection explicitly for pypy.
+        '''
+        self.udp_sock.close()
+
     def __repr__(self):
         return '<%s[%s:%d] P(%.1f)>' % (
             self.__class__.__name__,

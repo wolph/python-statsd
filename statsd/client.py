@@ -117,4 +117,3 @@ class Client(object):
 
     def _send(self, data):
         return self.connection.send(data)
-
