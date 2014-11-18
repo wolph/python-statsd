@@ -84,7 +84,7 @@ class Connection(object):
         '''
         We close UDP socket connection explicitly for pypy.
         '''
-        self.udp_sock.close()
+        self.udp_sock.close()  # pragma: no cover
 
     def __repr__(self):
         return '<%s[%s:%d] P(%.1f)>' % (
