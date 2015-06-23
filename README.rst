@@ -155,7 +155,7 @@ Advanced Usage
     ...         timer.start()
     ...
     ...         # do something
-    ...         timer.interval('intermediate_value')
+    ...         timer.intermediate('intermediate_value')
     ...
     ...         # do something else
     ...         timer.stop('total')
