@@ -96,3 +96,30 @@ class Gauge(statsd.Client):
         '''
         self.decrement(delta=delta)
         return self
+
+    def set(self, subname, value):
+        '''Set the data ignoring the sign, ie set("test", -1) will
+         set "test" exactly to -1 (not decrement it by 1)
+        
+        See
+        https://github.com/etsy/statsd/blob/master/docs/metric_types.md
+        "Adding a sign to the gauge value will change the value, rather
+         than setting it.
+                gaugor:-10|g
+                gaugor:+4|g
+        So if gaugor was 333, those commands would set it to 333 - 10 + 4,
+         or 327.
+        Note:
+        This implies you can't explicitly set a gauge to a negative number
+         without first setting it to zero."
+
+        :keyword subname: The subname to report the data to (appended to the
+            client name)
+        :type subname: str
+        :keyword value: The new gauge value
+        '''
+
+        assert isinstance(value, compat.NUM_TYPES)
+        if value < 0:
+            self._send(subname, 0)
+        return self._send(subname, value)
