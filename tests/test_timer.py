@@ -51,6 +51,7 @@ class TestTimerDecorator(TestTimerBase):
 
         assert self.get_time(mock_client, 'timer.spam') == 123.4, \
             'This test must execute within 2ms'
+        assert a.__name__ == 'a'
 
     @mock.patch('statsd.Client')
     def test_nested_naming_decorator(self, mock_client):
