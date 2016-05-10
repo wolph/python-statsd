@@ -24,3 +24,12 @@ class TestGauge(TestCase):
         with mock.patch('statsd.Client') as mock_client:
             self.gauge.send('', 1)
             mock_client._send.assert_called_with(mock.ANY, {'testing': '1|g'})
+
+    def test_set(self):
+        with mock.patch('statsd.Client') as mock_client:
+            self.gauge.set('', -1)
+            mock_client._send.assert_any_call(mock.ANY, {'testing': '0|g'})
+            mock_client._send.assert_any_call(mock.ANY, {'testing': '-1|g'})
+            mock_client.reset_mock()
+            self.gauge.set('', 1)
+            mock_client._send.assert_called_with(mock.ANY, {'testing': '1|g'})
