@@ -5,6 +5,7 @@ import statsd
 
 
 class TestTimerBase(TestCase):
+
     def tearDown(self):
         self._time_patch.stop()
 
@@ -16,6 +17,7 @@ class TestTimerBase(TestCase):
 
 
 class TestTimerDecorator(TestTimerBase):
+
     def setUp(self):
         self.timer = statsd.Timer('timer')
 
@@ -149,6 +151,7 @@ class TestTimerAdvancedUsage(TestTimerDecorator):
 
 
 class TestTimerZero(TestTimerBase):
+
     def setUp(self):
         # get time.time() to always return the same value so that this test
         # isn't system load dependant.

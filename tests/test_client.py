@@ -1,7 +1,9 @@
 import statsd
 from unittest import TestCase
 
+
 class TestClient(TestCase):
+
     def test_average_shortcut(self):
         average = statsd.Client('average').get_average()
         assert isinstance(average, statsd.Average)

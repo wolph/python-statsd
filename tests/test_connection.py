@@ -2,10 +2,14 @@ import mock
 import statsd
 import unittest
 
+
 class ConnectionException(Exception):
+
     pass
 
+
 class TestConnection(unittest.TestCase):
+
     def test_set_disabled_to_false_by_default(self):
         result = statsd.connection.Connection()
         assert result._disabled is False

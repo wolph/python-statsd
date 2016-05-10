@@ -16,12 +16,16 @@ Introduction
 `statsd` is a client for Etsy's statsd server, a front end/proxy for the
 Graphite stats collection and graphing server.
 
-* Graphite
-    - http://graphite.wikidot.com
-* Statsd
-    - code: https://github.com/etsy/statsd
-    - blog post: http://codeascraft.etsy.com/2011/02/15/measure-anything-measure-everything/
+Links
+-----
 
+ - The source: https://github.com/WoLpH/python-statsd
+ - Project page: https://pypi.python.org/pypi/python-statsd
+ - Reporting bugs: https://github.com/WoLpH/python-statsd/issues
+ - Documentation: http://python-statsd.readthedocs.io/en/latest/
+ - My blog: http://w.wol.ph/
+ - Statsd: https://github.com/etsy/statsd
+ - Graphite: http://graphite.wikidot.com
 
 Install
 -------
