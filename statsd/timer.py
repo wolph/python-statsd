@@ -1,5 +1,7 @@
 import contextlib
 import time
+from functools import wraps
+
 import statsd
 
 
@@ -88,6 +90,7 @@ class Timer(statsd.Client):
     def _decorate(self, name, function, class_=None):
         class_ = class_ or Timer
 
+        @wraps(function)
         def _decorator(*args, **kwargs):
             timer = self.get_client(name, class_)
             timer.start()
