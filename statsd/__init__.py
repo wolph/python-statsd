@@ -19,7 +19,7 @@ __all__ = [
 ]
 
 __package_name__ = 'python-statsd'
-__version__ = '1.7.2'
+__version__ = '2.0.0'
 __author__ = 'Rick van Hattem'
 __author_email__ = 'Wolph@wol.ph'
 __description__ = (
@@ -28,8 +28,8 @@ __description__ = (
 __url__ = 'https://github.com/WoLpH/python-statsd'
 
 
-# The doctests in this package, when run, will try to send data on the wire.  To
-# keep this from happening, we hook into nose's machinery to mock out
+# The doctests in this package, when run, will try to send data on the wire.
+# To keep this from happening, we hook into nose's machinery to mock out
 # `Connection.send` at the beginning of testing this package, and reset it at
 # the end.
 _connection_patch = None

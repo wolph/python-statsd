@@ -1,10 +1,11 @@
-"""
-Compatability library for python2 and python3 support.
-"""
+'''
+Compatibility library for python2 and python3 support.
+'''
 import sys
 import decimal
 
 PY3K = sys.version_info >= (3, 0)
+
 
 def iter_dict(dict_):  # pragma: no cover
     if PY3K:

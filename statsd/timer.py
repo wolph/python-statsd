@@ -1,11 +1,12 @@
 import contextlib
 import time
-from functools import wraps
+from functools import wraps, partial
 
 import statsd
 
 
 class Timer(statsd.Client):
+
     '''
     Statsd Timer Object
 
@@ -14,11 +15,11 @@ class Timer(statsd.Client):
 
     :keyword name: The name for this timer
     :type name: str
-    :keyword connection: The connection to use, will be automatically created if
-        not given
+    :keyword connection: The connection to use, will be automatically created
+        if not given
     :type connection: :class:`~statsd.connection.Connection`
-    :keyword min_send_threshold: Timings smaller than this will not be sent so -1
-        can be used for all.
+    :keyword min_send_threshold: Timings smaller than this will not be sent so
+        -1 can be used for all.
     :type min_send_threshold: int
 
     >>> timer = Timer('application_name').start()
@@ -127,7 +128,7 @@ class Timer(statsd.Client):
         if callable(function_or_name):
             return self._decorate(function_or_name.__name__, function_or_name)
         else:
-            return lambda f: self._decorate(function_or_name, f)
+            return partial(self._decorate, function_or_name)
 
     @contextlib.contextmanager
     def time(self, subname=None, class_=None):

@@ -13,17 +13,20 @@ class TestGauge(TestCase):
     def test_send_float(self):
         with mock.patch('statsd.Client') as mock_client:
             self.gauge.send('', 10.5)
-            mock_client._send.assert_called_with(mock.ANY, {'testing': '10.5|g'})
+            mock_client._send.assert_called_with(mock.ANY,
+                                                 {'testing': '10.5|g'})
 
     def test_send_decimal(self):
         with mock.patch('statsd.Client') as mock_client:
             self.gauge.send('', Decimal('6.576'))
-            mock_client._send.assert_called_with(mock.ANY, {'testing': '6.576|g'})
+            mock_client._send.assert_called_with(mock.ANY,
+                                                 {'testing': '6.576|g'})
 
     def test_send_integer(self):
         with mock.patch('statsd.Client') as mock_client:
             self.gauge.send('', 1)
-            mock_client._send.assert_called_with(mock.ANY, {'testing': '1|g'})
+            mock_client._send.assert_called_with(mock.ANY,
+                                                 {'testing': '1|g'})
 
     def test_set(self):
         with mock.patch('statsd.Client') as mock_client:

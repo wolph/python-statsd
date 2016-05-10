@@ -5,12 +5,13 @@ from . import compat
 
 
 class Client(object):
+
     '''Statsd Client Object
 
     :keyword name: The name for this client
     :type name: str
-    :keyword connection: The connection to use, will be automatically created if
-        not given
+    :keyword connection: The connection to use, will be automatically created
+        if not given
     :type connection: :class:`~statsd.connection.Connection`
 
     >>> client = Client('test')
