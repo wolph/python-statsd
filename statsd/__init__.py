@@ -19,7 +19,7 @@ __all__ = [
 ]
 
 __package_name__ = 'python-statsd'
-__version__ = '2.0.0'
+__version__ = '2.1.0'
 __author__ = 'Rick van Hattem'
 __author_email__ = 'Wolph@wol.ph'
 __description__ = (
@@ -49,4 +49,3 @@ def setup_package():
 def teardown_package():
     assert _connection_patch
     _connection_patch.stop()
-
