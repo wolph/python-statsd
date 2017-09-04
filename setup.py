@@ -18,23 +18,24 @@ docs_require = [
     'sphinx>=1.5.0',
 ]
 
-setuptools.setup(
-    name=statsd.__package_name__,
-    version=statsd.__version__,
-    author=statsd.__author__,
-    author_email=statsd.__author_email__,
-    description=statsd.__description__,
-    url=statsd.__url__,
-    license='BSD',
-    packages=setuptools.find_packages(exclude=('docs', 'tests',)),
-    long_description=long_description,
-    test_suite='nose.collector',
-    classifiers=[
-        'License :: OSI Approved :: BSD License',
-    ],
-    extras_require={
-        'docs': docs_require,
-        'tests': tests_require,
-    },
-)
+if __name__ == '__main__':
+    setuptools.setup(
+        name=statsd.__package_name__,
+        version=statsd.__version__,
+        author=statsd.__author__,
+        author_email=statsd.__author_email__,
+        description=statsd.__description__,
+        url=statsd.__url__,
+        license='BSD',
+        packages=setuptools.find_packages(exclude=('docs', 'tests',)),
+        long_description=long_description,
+        test_suite='nose.collector',
+        classifiers=[
+            'License :: OSI Approved :: BSD License',
+        ],
+        extras_require={
+            'docs': docs_require,
+            'tests': tests_require,
+        },
+    )
 
