@@ -90,9 +90,10 @@ class Timer(statsd.Client):
 
     def __enter__(self):
         '''
-        Make a context manager out of self to measure time execution in a block of code.
+        Make a context manager out of self to measure time execution in a block
+        of code.
 
-        :return:
+        :return: statsd.timer.Timer
         '''
         self.start()
         return self
