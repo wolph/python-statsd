@@ -15,7 +15,7 @@ setuptools.setup(
     description=statsd.__description__,
     url=statsd.__url__,
     license='BSD',
-    packages=setuptools.find_packages(exclude=('tests',)),
+    packages=setuptools.find_packages(exclude=('docs', 'tests',)),
     long_description=long_description,
     test_suite='nose.collector',
     tests_require=['nose', 'mock', 'coverage'],
