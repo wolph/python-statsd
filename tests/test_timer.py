@@ -137,7 +137,7 @@ class TestTimerAdvancedUsage(TestTimerDecorator):
         assert self.get_time(mock_client, 'timer6.extras') == 123.4, \
             'This test must execute within 2ms'
         timer6.stop()
-        assert self.get_time(mock_client, 'timer6.total') == 246.8, \
+        assert self.get_time(mock_client, 'timer6.total') == 370.2, \
             'This test must execute within 2ms'
 
         timer7 = statsd.Timer('timer7')
@@ -146,7 +146,7 @@ class TestTimerAdvancedUsage(TestTimerDecorator):
         assert self.get_time(mock_client, 'timer7.extras') == 123.4, \
             'This test must execute within 2ms'
         timer7.stop('test')
-        assert self.get_time(mock_client, 'timer7.test') == 246.8, \
+        assert self.get_time(mock_client, 'timer7.test') == 370.2, \
             'This test must execute within 2ms'
 
 
