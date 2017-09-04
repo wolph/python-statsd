@@ -7,6 +7,17 @@ if os.path.isfile('README.rst'):
 else:
     long_description = 'See http://pypi.python.org/pypi/python-statsd/'
 
+tests_require = [
+    'nose',
+    'coverage',
+    'mock',
+]
+
+docs_require = [
+    'changelog',
+    'sphinx>=1.5.0',
+]
+
 setuptools.setup(
     name=statsd.__package_name__,
     version=statsd.__version__,
@@ -18,9 +29,12 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude=('docs', 'tests',)),
     long_description=long_description,
     test_suite='nose.collector',
-    tests_require=['nose', 'mock', 'coverage'],
     classifiers=[
         'License :: OSI Approved :: BSD License',
     ],
+    extras_require={
+        'docs': docs_require,
+        'tests': tests_require,
+    },
 )
 
