@@ -15,13 +15,20 @@ Links
  - Statsd: https://github.com/etsy/statsd
  - Graphite: http://graphite.wikidot.com
 
-Contents:
+API
+---
 
 .. toctree::
    :maxdepth: 2
 
-   usage
-   statsd
+   statsd.connection
+   statsd.client
+   statsd.timer
+   statsd.counter
+   statsd.gauge
+   statsd.raw
+
+.. include :: ../README.rst
 
 Indices and tables
 ==================
