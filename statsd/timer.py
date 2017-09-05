@@ -88,6 +88,27 @@ class Timer(statsd.Client):
         self._stop = time.time()
         return self.send(subname, self._stop - self._start)
 
+    def __enter__(self):
+        '''
+        Make a context manager out of self to measure time execution in a block
+        of code.
+
+        :return: statsd.timer.Timer
+        '''
+        self.start()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        '''
+        Stop measuring time sending total metric, while exiting block of code.
+
+        :param exc_type:
+        :param exc_val:
+        :param exc_tb:
+        :return:
+        '''
+        self.stop()
+
     def _decorate(self, name, function, class_=None):
         class_ = class_ or Timer
 

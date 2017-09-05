@@ -20,7 +20,7 @@ import datetime
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath(os.path.pardir))
 
-import statsd
+from statsd import __about__ as statsd
 
 # -- General configuration -----------------------------------------------------
 

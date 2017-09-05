@@ -86,6 +86,16 @@ class TestTimerContextManager(TestTimerBase):
         time_time.side_effect = generator()
 
     @mock.patch('statsd.Client')
+    def test_context_manager(self, mock_client):
+        timer = statsd.Timer('cm')
+        with timer:
+            # Do something here
+            pass
+
+        assert self.get_time(mock_client, 'cm.total') == 123.4, \
+            'This test must execute within 2ms'
+
+    @mock.patch('statsd.Client')
     def test_context_manager_default(self, mock_client):
         timer = self.timer.get_client('default')
         with timer.time():
