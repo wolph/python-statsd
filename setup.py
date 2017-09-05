@@ -4,7 +4,7 @@ import setuptools
 # To prevent importing about and thereby breaking the coverage info we use this
 # exec hack
 about = {}
-with open('stl/__about__.py') as fp:
+with open('statsd/__about__.py') as fp:
     exec(fp.read(), about)
 
 if os.path.isfile('README.rst'):
