@@ -1,6 +1,11 @@
 import os
-import statsd
 import setuptools
+
+# To prevent importing about and thereby breaking the coverage info we use this
+# exec hack
+about = {}
+with open('stl/__about__.py') as fp:
+    exec(fp.read(), about)
 
 if os.path.isfile('README.rst'):
     long_description = open('README.rst').read()
@@ -20,12 +25,12 @@ docs_require = [
 
 if __name__ == '__main__':
     setuptools.setup(
-        name=statsd.__package_name__,
-        version=statsd.__version__,
-        author=statsd.__author__,
-        author_email=statsd.__author_email__,
-        description=statsd.__description__,
-        url=statsd.__url__,
+        name=about['__package_name__'],
+        version=about['__version__'],
+        author=about['__author__'],
+        author_email=about['__author_email__'],
+        description=about['__description__'],
+        url=about['__url__'],
         license='BSD',
         packages=setuptools.find_packages(exclude=('docs', 'tests',)),
         long_description=long_description,
