@@ -24,5 +24,4 @@ class Average(statsd.Client):
         '''
         name = self._get_name(self.name, subname)
         self.logger.info('%s: %d', name, value)
-        return statsd.Client._send(self, {name: '%d|a' % value})
-
+        return super(self.__class__, self)._send({name: '%d|a' % value})
