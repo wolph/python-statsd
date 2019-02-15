@@ -57,12 +57,11 @@ class Timer(statsd.Client):
         :type delta: float
         '''
         ms = delta * 1000
-        if ms > self.min_send_threshold:
-            name = self._get_name(self.name, subname)
-            self.logger.info('%s: %0.08fms', name, ms)
-            return statsd.Client._send(self, {name: '%0.08f|ms' % ms})
-        else:
-            return True
+        if ms <= self.min_send_threshold:
+            return False
+        name = self._get_name(self.name, subname)
+        self.logger.info('%s: %0.08fms', name, ms)
+        return super(self.__class__, self)._send({name: '%0.08f|ms' % ms})
 
     def intermediate(self, subname):
         '''Send the time that has passed since our last measurement
@@ -148,8 +147,7 @@ class Timer(statsd.Client):
         '''
         if callable(function_or_name):
             return self._decorate(function_or_name.__name__, function_or_name)
-        else:
-            return partial(self._decorate, function_or_name)
+        return partial(self._decorate, function_or_name)
 
     @contextlib.contextmanager
     def time(self, subname=None, class_=None):

@@ -17,7 +17,7 @@ class Gauge(statsd.Client):
         '''
         name = self._get_name(self.name, subname)
         self.logger.info('%s: %s', name, value)
-        return statsd.Client._send(self, {name: '%s|g' % value})
+        return super(self.__class__, self)._send({name: '%s|g' % value})
 
     def send(self, subname, value):
         '''Send the data to statsd via self.connection

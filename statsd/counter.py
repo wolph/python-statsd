@@ -29,7 +29,7 @@ class Counter(statsd.Client):
         '''
         name = self._get_name(self.name, subname)
         self.logger.info('%s: %d', name, delta)
-        return statsd.Client._send(self, {name: '%d|c' % delta})
+        return super(self.__class__, self)._send({name: '%d|c' % delta})
 
     def increment(self, subname=None, delta=1):
         '''Increment the counter with `delta`
