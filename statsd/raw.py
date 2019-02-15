@@ -35,4 +35,5 @@ class Raw(statsd.Client):
             ts = timestamp
         name = self._get_name(self.name, subname)
         self.logger.info('%s: %s %s' % (name, value, ts))
-        return super(self.__class__, self)._send({name: '%s|r|%s' % (value, ts)})
+        payload = '%s|r|%s' % (value, ts)
+        return super(self.__class__, self)._send({name: payload})
