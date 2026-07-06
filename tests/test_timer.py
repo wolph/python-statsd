@@ -1,205 +1,191 @@
-from unittest import TestCase, mock
+from collections.abc import Iterator
+from unittest import mock
 
+import pytest
 import statsd
 
 
-class TestTimerBase(TestCase):
-    def tearDown(self):
-        self._time_patch.stop()
+@pytest.fixture
+def perf_counter() -> Iterator[mock.MagicMock]:
+    """Fake time.perf_counter ticking 0.1234s per call."""
 
-    def get_time(self, mock_client, key):
-        return float(self.get_arg(mock_client, key).split('|')[0])
+    def generator() -> Iterator[float]:
+        i = 0.0
+        while True:
+            i += 0.1234
+            yield i
 
-    def get_arg(self, mock_client, key):
-        return mock_client._send.call_args[0][1][key]
+    with mock.patch('time.perf_counter', side_effect=generator()) as m:
+        yield m
 
 
-class TestTimerDecorator(TestTimerBase):
-    def setUp(self):
-        self.timer = statsd.Timer('timer')
+def get_time(udp_socket: mock.MagicMock, key: str) -> float:
+    data = udp_socket.send.call_args[0][0].decode()
+    name, _, value = data.partition(':')
+    assert name == key
+    assert value.endswith('|ms')
+    return round(float(value.removesuffix('|ms')), 4)
 
-        # get time.time() to always return the same value so that this test
-        # isn't system load dependant.
-        self._time_patch = mock.patch('time.time')
-        time_time = self._time_patch.start()
 
-        def generator():
-            i = 0.0
-            while True:
-                i += 0.1234
-                yield i
+@pytest.mark.usefixtures('perf_counter')
+class TestDecorator:
+    def test_bare(self, udp_socket: mock.MagicMock) -> None:
+        timer = statsd.Timer('timer')
 
-        time_time.side_effect = generator()
-
-    @mock.patch('statsd.Client')
-    def test_decorator_a(self, mock_client):
-        @self.timer.decorate
-        def a():
+        @timer.decorate
+        def a() -> None:
             pass
 
         a()
+        assert get_time(udp_socket, 'timer.a') == 123.4
 
-        assert self.get_time(mock_client, 'timer.a') == 123.4, (
-            'This test must execute within 2ms'
-        )
+    def test_named(self, udp_socket: mock.MagicMock) -> None:
+        timer = statsd.Timer('timer')
 
-    @mock.patch('statsd.Client')
-    def test_decorator_named_spam(self, mock_client):
-        @self.timer.decorate('spam')
-        def a():
+        @timer.decorate('spam')
+        def a() -> None:
             pass
 
         a()
-
-        assert self.get_time(mock_client, 'timer.spam') == 123.4, (
-            'This test must execute within 2ms'
-        )
+        assert get_time(udp_socket, 'timer.spam') == 123.4
         assert a.__name__ == 'a'
 
-    @mock.patch('statsd.Client')
-    def test_nested_naming_decorator(self, mock_client):
-        timer = self.timer.get_client('eggs0')
+    def test_nested_naming(self, udp_socket: mock.MagicMock) -> None:
+        timer = statsd.Timer('timer').get_client('eggs0')
 
         @timer.decorate('d0')
-        def a():
+        def a() -> None:
             pass
 
         a()
+        assert get_time(udp_socket, 'timer.eggs0.d0') == 123.4
 
-        assert self.get_time(mock_client, 'timer.eggs0.d0') == 123.4, (
-            'This test must execute within 2ms'
-        )
+    def test_sends_on_exception(self, udp_socket: mock.MagicMock) -> None:
+        timer = statsd.Timer('timer')
+
+        @timer.decorate
+        def a() -> None:
+            raise ValueError('boom')
+
+        with pytest.raises(ValueError, match='boom'):
+            a()
+        assert get_time(udp_socket, 'timer.a') == 123.4
+
+    def test_return_value(self, udp_socket: mock.MagicMock) -> None:
+        timer = statsd.Timer('timer')
+
+        @timer.decorate
+        def a() -> int:
+            return 42
+
+        assert a() == 42
 
 
-class TestTimerContextManager(TestTimerBase):
-    def setUp(self):
-        self.timer = statsd.Timer('cm')
-
-        # get time.time() to always return the same value so that this test
-        # isn't system load dependant.
-        self._time_patch = mock.patch('time.time')
-        time_time = self._time_patch.start()
-
-        def generator():
-            i = 0.0
-            while True:
-                i += 0.1234
-                yield i
-
-        time_time.side_effect = generator()
-
-    @mock.patch('statsd.Client')
-    def test_context_manager(self, mock_client):
-        timer = statsd.Timer('cm')
-        with timer:
-            # Do something here
+@pytest.mark.usefixtures('perf_counter')
+class TestContextManager:
+    def test_with_timer(self, udp_socket: mock.MagicMock) -> None:
+        with statsd.Timer('cm'):
             pass
+        assert get_time(udp_socket, 'cm.total') == 123.4
 
-        assert self.get_time(mock_client, 'cm.total') == 123.4, (
-            'This test must execute within 2ms'
-        )
-
-    @mock.patch('statsd.Client')
-    def test_context_manager_default(self, mock_client):
-        timer = self.timer.get_client('default')
+    def test_time_default(self, udp_socket: mock.MagicMock) -> None:
+        timer = statsd.Timer('cm').get_client('default')
         with timer.time():
             pass
+        assert get_time(udp_socket, 'cm.default') == 123.4
 
-        assert self.get_time(mock_client, 'cm.default') == 123.4, (
-            'This test must execute within 2ms'
-        )
-
-    @mock.patch('statsd.Client')
-    def test_context_manager_named(self, mock_client):
-        timer = self.timer.get_client('named')
+    def test_time_named(self, udp_socket: mock.MagicMock) -> None:
+        timer = statsd.Timer('cm').get_client('named')
         with timer.time('name'):
             pass
+        assert get_time(udp_socket, 'cm.named.name') == 123.4
 
-        assert self.get_time(mock_client, 'cm.named.name') == 123.4, (
-            'This test must execute within 2ms'
-        )
-
-    @mock.patch('statsd.Client')
-    def test_context_manager_class(self, mock_client):
-        timer = self.timer.get_client('named')
+    def test_time_class(self, udp_socket: mock.MagicMock) -> None:
+        timer = statsd.Timer('cm').get_client('named')
         with timer.time(class_=statsd.Timer):
             pass
+        assert get_time(udp_socket, 'cm.named') == 123.4
 
-        assert self.get_time(mock_client, 'cm.named') == 123.4, (
-            'This test must execute within 2ms'
-        )
+    def test_time_yields_timer(self) -> None:
+        timer = statsd.Timer('cm')
+        with timer.time('sub') as inner:
+            assert isinstance(inner, statsd.Timer)
+            assert inner.name == 'cm.sub'
 
-
-class TestTimerAdvancedUsage(TestTimerDecorator):
-    @mock.patch('statsd.Client')
-    def test_timer_total(self, mock_client):
-        timer4 = statsd.Timer('timer4')
-        timer4.start()
-        timer4.stop()
-        assert self.get_time(mock_client, 'timer4.total') == 123.4, (
-            'This test must execute within 2ms'
-        )
-
-        timer5 = statsd.Timer('timer5')
-        timer5.start()
-        timer5.stop('test')
-        assert self.get_time(mock_client, 'timer5.test') == 123.4, (
-            'This test must execute within 2ms'
-        )
-
-    @mock.patch('statsd.Client')
-    def test_timer_intermediate(self, mock_client):
-        timer6 = statsd.Timer('timer6')
-        timer6.start()
-        timer6.intermediate('extras')
-        assert self.get_time(mock_client, 'timer6.extras') == 123.4, (
-            'This test must execute within 2ms'
-        )
-        timer6.stop()
-        assert self.get_time(mock_client, 'timer6.total') == 246.8, (
-            'This test must execute within 2ms'
-        )
-
-        timer7 = statsd.Timer('timer7')
-        timer7.start()
-        timer7.intermediate('extras')
-        assert self.get_time(mock_client, 'timer7.extras') == 123.4, (
-            'This test must execute within 2ms'
-        )
-        timer7.stop('test')
-        assert self.get_time(mock_client, 'timer7.test') == 246.8, (
-            'This test must execute within 2ms'
-        )
+    def test_time_sends_on_exception(self, udp_socket: mock.MagicMock) -> None:
+        timer = statsd.Timer('cm')
+        with pytest.raises(ValueError, match='boom'):
+            with timer.time('failing'):
+                raise ValueError('boom')
+        assert get_time(udp_socket, 'cm.failing') == 123.4
 
 
-class TestTimerZero(TestTimerBase):
-    def setUp(self):
-        # get time.time() to always return the same value so that this test
-        # isn't system load dependant.
-        self._time_patch = mock.patch('time.time')
-        time_time = self._time_patch.start()
+@pytest.mark.usefixtures('perf_counter')
+class TestStartStop:
+    def test_stop_default_subname(self, udp_socket: mock.MagicMock) -> None:
+        timer = statsd.Timer('timer4')
+        timer.start()
+        assert timer.stop() is True
+        assert get_time(udp_socket, 'timer4.total') == 123.4
 
-        def generator():
-            while True:
-                yield 0
+    def test_stop_named_subname(self, udp_socket: mock.MagicMock) -> None:
+        timer = statsd.Timer('timer5')
+        timer.start()
+        assert timer.stop('test') is True
+        assert get_time(udp_socket, 'timer5.test') == 123.4
 
-        time_time.side_effect = generator()
+    def test_chained_start(self, udp_socket: mock.MagicMock) -> None:
+        timer = statsd.Timer('timer').start()
+        assert isinstance(timer, statsd.Timer)
+        assert timer.stop() is True
 
-    def tearDown(self):
-        self._time_patch.stop()
+    def test_intermediate(self, udp_socket: mock.MagicMock) -> None:
+        timer = statsd.Timer('timer6')
+        timer.start()
+        timer.intermediate('extras')
+        assert get_time(udp_socket, 'timer6.extras') == 123.4
+        timer.stop()
+        assert get_time(udp_socket, 'timer6.total') == 246.8
 
-    @mock.patch('statsd.Client')
-    def test_timer_zero(self, mock_client):
-        timer8 = statsd.Timer('timer8', min_send_threshold=0)
-        timer8.start()
-        timer8.stop()
-        assert mock_client._send.call_args is None, (
-            '0 timings shouldnt be sent'
-        )
+    def test_intermediate_named_stop(self, udp_socket: mock.MagicMock) -> None:
+        timer = statsd.Timer('timer7')
+        timer.start()
+        timer.intermediate('extras')
+        assert get_time(udp_socket, 'timer7.extras') == 123.4
+        timer.stop('test')
+        assert get_time(udp_socket, 'timer7.test') == 246.8
 
-        timer9 = statsd.Timer('timer9', min_send_threshold=0)
-        timer9.start()
-        timer9.stop('test')
-        assert mock_client._send.call_args is None, (
-            '0 timings shouldnt be sent'
-        )
+
+class TestStateErrors:
+    def test_start_twice(self) -> None:
+        timer = statsd.Timer('timer').start()
+        with pytest.raises(RuntimeError, match='already running'):
+            timer.start()
+
+    def test_stop_without_start(self) -> None:
+        with pytest.raises(RuntimeError, match='never started'):
+            statsd.Timer('timer').stop()
+
+    def test_stop_twice(self) -> None:
+        timer = statsd.Timer('timer').start()
+        timer.stop()
+        with pytest.raises(RuntimeError, match='already stopped'):
+            timer.stop()
+
+    def test_intermediate_without_start(self) -> None:
+        with pytest.raises(RuntimeError, match='never started'):
+            statsd.Timer('timer').intermediate('spam')
+
+
+class TestMinSendThreshold:
+    def test_zero_timing_not_sent(self, udp_socket: mock.MagicMock) -> None:
+        with mock.patch('time.perf_counter', return_value=42.0):
+            timer = statsd.Timer('timer8', min_send_threshold=0)
+            timer.start()
+            assert timer.stop() is True
+        assert not udp_socket.send.called
+
+    def test_above_threshold_sent(self, udp_socket: mock.MagicMock) -> None:
+        timer = statsd.Timer('timer9', min_send_threshold=0)
+        assert timer.send('spam', 0.5) is True
+        assert udp_socket.send.called
