@@ -1,11 +1,9 @@
-from __future__ import with_statement
-from unittest import TestCase
-import mock
+from unittest import TestCase, mock
+
 import statsd
 
 
 class TestCounter(TestCase):
-
     def setUp(self):
         self.counter = statsd.Counter('testing')
 

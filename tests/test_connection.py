@@ -1,15 +1,14 @@
-import mock
-import statsd
 import unittest
+from unittest import mock
+
+import statsd
 
 
 class ConnectionException(Exception):
-
     pass
 
 
 class TestConnection(unittest.TestCase):
-
     def test_set_disabled_to_false_by_default(self):
         result = statsd.connection.Connection()
         assert result._disabled is False
@@ -58,6 +57,4 @@ class TestConnection(unittest.TestCase):
 
     def test_repr(self):
         connection = statsd.connection.Connection()
-        assert '<Connection[localhost:8125] P(1.0)>' == repr(connection)
-
-
+        assert repr(connection) == '<Connection[localhost:8125] P(1.0)>'
