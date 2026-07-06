@@ -1,13 +1,19 @@
-# ruff: noqa: F401, I001
-from statsd.connection import Connection  # noqa
-from statsd.client import Client  # noqa
-from statsd.timer import Timer  # noqa
-from statsd.gauge import Gauge  # noqa
-from statsd.average import Average  # noqa
-from statsd.raw import Raw  # noqa
-from statsd.counter import Counter, decrement, increment  # noqa
+"""statsd is a client for Etsy's statsd server, a front end/proxy for
+the Graphite stats collection and graphing server."""
 
-__all__ = (  # noqa: F405
+import importlib.metadata
+
+from statsd.average import Average
+from statsd.client import Client
+from statsd.connection import Connection
+from statsd.counter import Counter, decrement, increment
+from statsd.gauge import Gauge
+from statsd.raw import Raw
+from statsd.timer import Timer
+
+__version__: str = importlib.metadata.version('python-statsd')
+
+__all__ = [
     'Average',
     'Client',
     'Connection',
@@ -17,4 +23,4 @@ __all__ = (  # noqa: F405
     'Timer',
     'decrement',
     'increment',
-)
+]

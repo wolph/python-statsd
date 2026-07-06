@@ -32,7 +32,7 @@ class Gauge(Client):
         :type subname: str
         :keyword value: The gauge value to send
         """
-        if not isinstance(value, _NUM_TYPES):
+        if not isinstance(value, _NUM_TYPES):  # pyright: ignore[reportUnnecessaryIsInstance]
             raise TypeError(f'gauge values must be numeric, got {value!r}')
         return self._send_value(subname, value)
 
@@ -127,7 +127,7 @@ class Gauge(Client):
         :type subname: str
         :keyword value: The new gauge value
         """
-        if not isinstance(value, _NUM_TYPES):
+        if not isinstance(value, _NUM_TYPES):  # pyright: ignore[reportUnnecessaryIsInstance]
             raise TypeError(f'gauge values must be numeric, got {value!r}')
         if value < 0:
             self._send_value(subname, 0)

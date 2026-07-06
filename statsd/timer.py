@@ -176,9 +176,12 @@ class Timer(Client):
         ...     # resulting timer name: application_name.my_timer
         ...     pass
         """
-        if callable(function_or_name):
-            return self._decorate(function_or_name.__name__, function_or_name)
-        return functools.partial(self._decorate, function_or_name)
+        if isinstance(function_or_name, str):
+            return functools.partial(self._decorate, function_or_name)
+        name: str = getattr(
+            function_or_name, '__name__', type(function_or_name).__name__
+        )
+        return self._decorate(name, function_or_name)
 
     @contextlib.contextmanager
     def time(

@@ -15,7 +15,6 @@ keywords = ["statsd", "graphite", "metrics", "udp"]
 classifiers = [
     "Development Status :: 6 - Mature",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Natural Language :: English",
     "Programming Language :: Python",
@@ -85,3 +84,29 @@ exclude_also = [
     "if TYPE_CHECKING:",
     "@(typing\\.)?overload",
 ]
+
+[tool.mypy]
+packages = ["statsd"]
+local_partial_types = true
+strict = true
+enable_error_code = [
+    "exhaustive-match",
+    "ignore-without-code",
+    "redundant-expr",
+    "truthy-bool",
+]
+
+[tool.pyright]
+pythonPlatform = "All"
+include = ["statsd"]
+ignore = [".venv", ".tox", "pystatsd"]
+typeCheckingMode = "strict"
+reportPrivateUsage = false
+reportUnusedParameter = false
+reportUnusedVariable = false
+
+[tool.pyrefly]
+project-includes = ["statsd"]
+
+[tool.ty.src]
+include = ["statsd"]

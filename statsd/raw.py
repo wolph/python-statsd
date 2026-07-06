@@ -34,6 +34,7 @@ class Raw(Client):
         :keyword value: The raw value to send
         :keyword timestamp: The timestamp to send (defaults to current time)
         """
+        ts: float
         if timestamp is None:
             ts = int(time.time())
         else:
