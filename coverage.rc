@@ -1,5 +1,0 @@
-[run]
-source = statsd,tests
-omit =
-    */nose/*
-    */compat.py
