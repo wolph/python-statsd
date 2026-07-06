@@ -80,6 +80,26 @@ class TestDecorator:
 
         assert a() == 42
 
+    def test_decorate_with_explicit_class(
+        self, udp_socket: mock.MagicMock
+    ) -> None:
+        used: list[type] = []
+
+        class CustomTimer(statsd.Timer):
+            def send(self, subname: str, delta: float) -> bool:
+                used.append(type(self))
+                return super().send(subname, delta)
+
+        timer = statsd.Timer('timer')
+
+        def a() -> None:
+            pass
+
+        decorated = timer._decorate('custom', a, class_=CustomTimer)
+        decorated()
+        assert used == [CustomTimer]
+        assert get_time(udp_socket, 'timer.custom') == 123.4
+
 
 @pytest.mark.usefixtures('perf_counter')
 class TestContextManager:
