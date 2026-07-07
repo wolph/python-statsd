@@ -8,10 +8,10 @@ Links
 -----
 
  - The source: https://github.com/WoLpH/python-statsd
- - Project page: https://pypi.python.org/pypi/python-statsd
+ - Project page: https://pypi.org/project/python-statsd/
  - Reporting bugs: https://github.com/WoLpH/python-statsd/issues
- - Documentation: http://python-statsd.readthedocs.io/en/latest/
- - My blog: http://w.wol.ph/
+ - Documentation: https://python-statsd.readthedocs.io/en/latest/
+ - My blog: https://wol.ph/
  - Statsd: https://github.com/etsy/statsd
  - Graphite: http://graphite.wikidot.com
 
@@ -26,6 +26,7 @@ API
    statsd.timer
    statsd.counter
    statsd.gauge
+   statsd.average
    statsd.raw
 
 .. include :: ../README.rst

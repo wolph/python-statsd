@@ -1,43 +1,26 @@
-from statsd.connection import Connection
-from statsd.client import Client
-from statsd.timer import Timer
-from statsd.gauge import Gauge
+"""statsd is a client for Etsy's statsd server, a front end/proxy for
+the Graphite stats collection and graphing server."""
+
+import importlib.metadata
+
 from statsd.average import Average
+from statsd.client import Client
+from statsd.connection import Connection
+from statsd.counter import Counter, decrement, increment
+from statsd.gauge import Gauge
 from statsd.raw import Raw
-from statsd.counter import Counter, increment, decrement
+from statsd.timer import Timer
+
+__version__: str = importlib.metadata.version('python-statsd')
 
 __all__ = [
+    'Average',
     'Client',
     'Connection',
-    'Timer',
     'Counter',
     'Gauge',
-    'Average',
     'Raw',
-    'increment',
+    'Timer',
     'decrement',
+    'increment',
 ]
-
-
-# The doctests in this package, when run, will try to send data on the wire.
-# To keep this from happening, we hook into nose's machinery to mock out
-# `Connection.send` at the beginning of testing this package, and reset it at
-# the end.
-_connection_patch = None
-
-
-def setup_package():
-    # Since we don't want mock to be a global requirement, we need the import
-    # the setup method.
-    import mock
-    global _connection_patch
-    _connection_patch = mock.patch('statsd.Connection.send')
-
-    send = _connection_patch.start()
-    send.return_value = True
-
-
-def teardown_package():
-    assert _connection_patch
-    _connection_patch.stop()
-

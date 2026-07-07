@@ -1,39 +1,57 @@
-Introduction
-============
+Python StatsD Client
+====================
 
-.. image:: https://travis-ci.org/WoLpH/python-statsd.svg?branch=master
+.. image:: https://github.com/WoLpH/python-statsd/actions/workflows/ci.yml/badge.svg?branch=master
     :alt: Test Status
-    :target: https://travis-ci.org/WoLpH/python-statsd
+    :target: https://github.com/WoLpH/python-statsd/actions/workflows/ci.yml
 
-.. image:: https://coveralls.io/repos/WoLpH/python-statsd/badge.svg?branch=master
-    :alt: Coverage Status
-    :target: https://coveralls.io/r/WoLpH/python-statsd?branch=master
+.. image:: https://img.shields.io/pypi/v/python-statsd.svg
+    :alt: PyPI version
+    :target: https://pypi.org/project/python-statsd/
 
-`statsd` is a client for Etsy's statsd server, a front end/proxy for the
-Graphite stats collection and graphing server.
+.. image:: https://img.shields.io/pypi/pyversions/python-statsd.svg
+    :alt: Supported Python versions
+    :target: https://pypi.org/project/python-statsd/
+
+``python-statsd`` is a client for Etsy's statsd server, a front
+end/proxy for the Graphite stats collection and graphing server. It
+supports Python 3.10+ and has no dependencies.
+
+Note on the package name
+------------------------
+
+This package installs the ``statsd`` Python module and is published on
+PyPI as ``python-statsd``. There is a different project published on
+PyPI as ``statsd`` (jsocol's client) which *also* installs a ``statsd``
+module: installing both in one environment will break either or both.
+Install exactly one of the two.
 
 Links
 -----
 
  - The source: https://github.com/WoLpH/python-statsd
- - Project page: https://pypi.python.org/pypi/python-statsd
+ - Project page: https://pypi.org/project/python-statsd/
  - Reporting bugs: https://github.com/WoLpH/python-statsd/issues
- - Documentation: http://python-statsd.readthedocs.io/en/latest/
- - My blog: http://w.wol.ph/
+ - Documentation: https://python-statsd.readthedocs.io/
+ - My blog: https://wol.ph/
  - Statsd: https://github.com/etsy/statsd
- - Graphite: http://graphite.wikidot.com
+ - Graphite: https://graphiteapp.org/
 
 Install
 -------
 
-To install simply execute `python setup.py install`.
-If you want to run the tests first, run `python setup.py nosetests`
+.. code-block:: bash
 
+    pip install python-statsd
+
+or with uv:
+
+.. code-block:: bash
+
+    uv pip install python-statsd
 
 Usage
 -----
-
-To get started real quick, just try something like this:
 
 Basic Usage
 ~~~~~~~~~~~
@@ -44,11 +62,22 @@ Timers
     >>> import statsd
     >>>
     >>> timer = statsd.Timer('MyApplication')
-    >>>
     >>> timer.start()
     >>> # do something here
     >>> timer.stop('SomeTimer')
 
+Or as a context manager (the metric is also sent when the block raises
+an exception):
+
+    >>> with statsd.Timer('MyApplication').time('SomeTimer'):
+    ...     pass  # do something here
+
+Or as a decorator:
+
+    >>> timer = statsd.Timer('MyApplication')
+    >>> @timer.decorate
+    ... def some_function():
+    ...     pass  # resulting timer name: MyApplication.some_function
 
 Counters
 ^^^^^^^^
@@ -59,7 +88,6 @@ Counters
     >>> # do something here
     >>> counter += 1
 
-
 Gauge
 ^^^^^
 
@@ -67,48 +95,45 @@ Gauge
     >>>
     >>> gauge = statsd.Gauge('MyApplication')
     >>> # do something here
-    >>> gauge.send('SomeName', value)
-
+    >>> gauge.send('SomeName', 42)
 
 Raw
 ^^^
 
-Raw strings should be e.g. pre-summarized data or other data that will
-get passed directly to carbon.  This can be used as a time and
-bandwidth-saving mechanism sending a lot of samples could use a lot of
+Raw values should be e.g. pre-summarized data or other data that will
+get passed directly to carbon. This can be used as a time and
+bandwidth-saving mechanism: sending a lot of samples could use a lot of
 bandwidth (more b/w is used in udp headers than data for a gauge, for
 instance).
 
-
-
     >>> import statsd
     >>>
-    >>> raw = statsd.Raw('MyApplication', connection)
+    >>> raw = statsd.Raw('MyApplication')
     >>> # do something here
-    >>> raw.send('SomeName', value, timestamp)
+    >>> raw.send('SomeName', 42, timestamp=1234567890)
 
-The raw type wants to have a timestamp in seconds since the epoch (the
-standard unix timestamp, e.g. the output of "date +%s"), but if you leave it out or
-provide None it will provide the current time as part of the message
+The raw type wants a timestamp in seconds since the epoch (the standard
+unix timestamp, e.g. the output of ``date +%s``); if you leave it out
+or pass ``None`` the current time is used.
 
 Average
 ^^^^^^^
 
     >>> import statsd
     >>>
-    >>> average = statsd.Average('MyApplication', connection)
+    >>> average = statsd.Average('MyApplication')
     >>> # do something here
-    >>> average.send('SomeName', 'somekey:%d'.format(value))
-
+    >>> average.send('SomeName', 123)
 
 Connection settings
 ^^^^^^^^^^^^^^^^^^^
 
-If you need some settings other than the defaults for your ``Connection``,
-you can use ``Connection.set_defaults()``.
-    
+If you need some settings other than the defaults for your
+``Connection``, you can use ``Connection.set_defaults()``:
+
     >>> import statsd
-    >>> statsd.Connection.set_defaults(host='localhost', port=8125, sample_rate=1, disabled=False)
+    >>> statsd.Connection.set_defaults(
+    ...     host='localhost', port=8125, sample_rate=1, disabled=False)
 
 Every interaction with statsd after these are set will use whatever you
 specify, unless you explicitly create a different ``Connection`` to use
@@ -121,13 +146,13 @@ Defaults:
 - ``sample_rate`` = ``1``
 - ``disabled`` = ``False``
 
-
 Advanced Usage
 --------------
 
     >>> import statsd
     >>>
-    >>> # Open a connection to `server` on port `1234` with a `50%` sample rate
+    >>> # Open a connection to `server` on port `1234` with a
+    >>> # `50%` sample rate
     >>> statsd_connection = statsd.Connection(
     ...     host='server',
     ...     port=1234,
@@ -137,7 +162,7 @@ Advanced Usage
     >>> # Create a client for this application
     >>> statsd_client = statsd.Client(__name__, statsd_connection)
     >>>
-    >>> class SomeClass(object):
+    >>> class SomeClass:
     ...     def __init__(self):
     ...         # Create a client specific for this class
     ...         self.statsd_client = statsd_client.get_client(
@@ -145,7 +170,8 @@ Advanced Usage
     ...
     ...     def do_something(self):
     ...         # Create a `timer` client
-    ...         timer = self.statsd_client.get_client(class_=statsd.Timer)
+    ...         timer = self.statsd_client.get_client(
+    ...             class_=statsd.Timer)
     ...
     ...         # start the measurement
     ...         timer.start()
@@ -156,15 +182,16 @@ Advanced Usage
     ...         # do something else
     ...         timer.stop('total')
 
-If there is a need to turn *OFF* the service and avoid sending UDP messages,
-the ``Connection`` class can be disabled by enabling the disabled argument::
+If there is a need to turn *OFF* the service and avoid sending UDP
+messages, the ``Connection`` class can be disabled with the ``disabled``
+argument:
 
     >>> statsd_connection = statsd.Connection(
     ...     host='server',
     ...     port=1234,
     ...     sample_rate=0.5,
-    ...     disabled=True
+    ...     disabled=True,
     ... )
 
-If logging's level is set to debug the ``Connection`` object will inform it is
-not sending UDP messages anymore.
+If logging's level is set to debug the ``Connection`` object will
+inform it is not sending UDP messages anymore.

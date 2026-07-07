@@ -1,38 +1,95 @@
-from __future__ import with_statement
-from unittest import TestCase
-from decimal import Decimal
-import mock
+import decimal
+from unittest import mock
+
+import pytest
 import statsd
 
 
-class TestGauge(TestCase):
+@pytest.fixture
+def gauge() -> statsd.Gauge:
+    return statsd.Gauge('testing')
 
-    def setUp(self):
-        self.gauge = statsd.Gauge('testing')
 
-    def test_send_float(self):
-        with mock.patch('statsd.Client') as mock_client:
-            self.gauge.send('', 10.5)
-            mock_client._send.assert_called_with(mock.ANY,
-                                                 {'testing': '10.5|g'})
+def last_sent(udp_socket: mock.MagicMock) -> bytes:
+    return udp_socket.send.call_args[0][0]
 
-    def test_send_decimal(self):
-        with mock.patch('statsd.Client') as mock_client:
-            self.gauge.send('', Decimal('6.576'))
-            mock_client._send.assert_called_with(mock.ANY,
-                                                 {'testing': '6.576|g'})
 
-    def test_send_integer(self):
-        with mock.patch('statsd.Client') as mock_client:
-            self.gauge.send('', 1)
-            mock_client._send.assert_called_with(mock.ANY,
-                                                 {'testing': '1|g'})
+def sent(udp_socket: mock.MagicMock) -> list[bytes]:
+    return [call[0][0] for call in udp_socket.send.call_args_list]
 
-    def test_set(self):
-        with mock.patch('statsd.Client') as mock_client:
-            self.gauge.set('', -1)
-            mock_client._send.assert_any_call(mock.ANY, {'testing': '0|g'})
-            mock_client._send.assert_any_call(mock.ANY, {'testing': '-1|g'})
-            mock_client.reset_mock()
-            self.gauge.set('', 1)
-            mock_client._send.assert_called_with(mock.ANY, {'testing': '1|g'})
+
+def test_send_float(gauge: statsd.Gauge, udp_socket: mock.MagicMock) -> None:
+    assert gauge.send('spam', 10.5) is True
+    assert last_sent(udp_socket) == b'testing.spam:10.5|g'
+
+
+def test_send_decimal(gauge: statsd.Gauge, udp_socket: mock.MagicMock) -> None:
+    assert gauge.send('spam', decimal.Decimal('6.576')) is True
+    assert last_sent(udp_socket) == b'testing.spam:6.576|g'
+
+
+def test_send_integer(gauge: statsd.Gauge, udp_socket: mock.MagicMock) -> None:
+    assert gauge.send('spam', 1) is True
+    assert last_sent(udp_socket) == b'testing.spam:1|g'
+
+
+def test_send_non_numeric_raises(gauge: statsd.Gauge) -> None:
+    with pytest.raises(TypeError, match='numeric'):
+        gauge.send('spam', 'not-a-number')  # type: ignore[arg-type]
+
+
+def test_set_positive(gauge: statsd.Gauge, udp_socket: mock.MagicMock) -> None:
+    assert gauge.set('spam', 1) is True
+    assert sent(udp_socket) == [b'testing.spam:1|g']
+
+
+def test_set_negative_sends_zero_first(
+    gauge: statsd.Gauge, udp_socket: mock.MagicMock
+) -> None:
+    assert gauge.set('spam', -1) is True
+    assert sent(udp_socket) == [b'testing.spam:0|g', b'testing.spam:-1|g']
+
+
+def test_set_non_numeric_raises(gauge: statsd.Gauge) -> None:
+    with pytest.raises(TypeError, match='numeric'):
+        gauge.set('spam', None)  # type: ignore[arg-type]
+
+
+def test_increment(gauge: statsd.Gauge, udp_socket: mock.MagicMock) -> None:
+    assert gauge.increment('spam', 10) is True
+    assert last_sent(udp_socket) == b'testing.spam:+10|g'
+    assert gauge.increment(delta=10) is True
+    assert last_sent(udp_socket) == b'testing:+10|g'
+
+
+def test_increment_negative_delta(
+    gauge: statsd.Gauge, udp_socket: mock.MagicMock
+) -> None:
+    assert gauge.increment('spam', -10) is True
+    assert last_sent(udp_socket) == b'testing.spam:-10|g'
+
+
+def test_decrement(gauge: statsd.Gauge, udp_socket: mock.MagicMock) -> None:
+    assert gauge.decrement('spam', 10) is True
+    assert last_sent(udp_socket) == b'testing.spam:-10|g'
+    assert gauge.decrement(delta=10) is True
+    assert last_sent(udp_socket) == b'testing:-10|g'
+
+
+def test_decrement_negative_delta(
+    gauge: statsd.Gauge, udp_socket: mock.MagicMock
+) -> None:
+    assert gauge.decrement('spam', -10) is True
+    assert last_sent(udp_socket) == b'testing.spam:+10|g'
+
+
+def test_add(gauge: statsd.Gauge, udp_socket: mock.MagicMock) -> None:
+    gauge += 5
+    assert isinstance(gauge, statsd.Gauge)
+    assert last_sent(udp_socket) == b'testing:+5|g'
+
+
+def test_sub(gauge: statsd.Gauge, udp_socket: mock.MagicMock) -> None:
+    gauge -= 5
+    assert isinstance(gauge, statsd.Gauge)
+    assert last_sent(udp_socket) == b'testing:-5|g'

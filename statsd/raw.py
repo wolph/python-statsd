@@ -1,9 +1,10 @@
-import statsd
-import datetime as dt
+import time
+
+from statsd.client import Client
 
 
-class Raw(statsd.Client):
-    '''Class to implement a statsd raw message.
+class Raw(Client):
+    """Class to implement a statsd raw message.
     If a service has already summarized its own
     data for e.g. inspection purposes, use this
     summarized data to send to a statsd that has
@@ -16,24 +17,28 @@ class Raw(statsd.Client):
     >>> raw = Raw('test')
     >>> raw.send('name', 12435)
     True
-    >>> import time
     >>> raw.send('name', 12435, time.time())
     True
-    '''
+    """
 
-    def send(self, subname, value, timestamp=None):
-        '''Send the data to statsd via self.connection
+    def send(
+        self,
+        subname: str | None,
+        value: object,
+        timestamp: float | None = None,
+    ) -> bool:
+        """Send the data to statsd via self.connection
 
         :keyword subname: The subname to report the data to (appended to the
             client name)
-        :type subname: str
         :keyword value: The raw value to send
-        '''
+        :keyword timestamp: The timestamp to send (defaults to current time)
+        """
+        ts: float
         if timestamp is None:
-            ts = int(dt.datetime.now().strftime("%s"))
+            ts = int(time.time())
         else:
             ts = timestamp
         name = self._get_name(self.name, subname)
-        self.logger.info('%s: %s %s' % (name, value, ts))
-        return statsd.Client._send(self, {name: '%s|r|%s' % (value, ts)})
-
+        self.logger.info('%s: %s %s', name, value, ts)
+        return self._send({name: f'{value}|r|{ts}'})
