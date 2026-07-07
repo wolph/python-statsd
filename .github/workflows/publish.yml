@@ -5,6 +5,9 @@ on:
     types: [published]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   # Run the full test suite here so nothing reaches PyPI without
   # passing tests.

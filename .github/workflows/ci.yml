@@ -8,6 +8,9 @@ on:
   # Allows publish.yml to run the full test suite as a release gate.
   workflow_call:
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: true

@@ -16,17 +16,16 @@ First release since 2.1.0 (2017). Full modernization of the project.
   removed from the `statsd` package.
 - `statsd.__about__` was removed; use `statsd.__version__` and the
   package metadata instead.
+- The statsd.compat module (Python 2 helpers) was removed.
 
 ### Bugfixes
 
-- `Timer.time()` context manager and `Timer.decorate` now send the
-  metric even when the timed block/function raises an exception,
-  matching the `with Timer(...)` behavior.
+- The `Timer.time()` context manager now sends the metric even when
+  the timed block raises an exception, matching the behavior of
+  `with Timer(...)` and `@timer.decorate`.
 - Timer measurements use the monotonic `time.perf_counter()` instead
   of the wall clock, so clock adjustments can't produce negative or
   wildly wrong timings.
-- `Timer.decorate` now returns the wrapped function's return value
-  (previously it was swallowed).
 - Passing `bytes` metric names no longer crashes on Python 3.
 - `Raw.send` default timestamps no longer rely on the non-portable
   `strftime('%s')`.
