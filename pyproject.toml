@@ -111,3 +111,6 @@ project-includes = ["statsd"]
 
 [tool.ty.src]
 include = ["statsd"]
+
+[tool.uv]
+exclude-newer = "14 days"
