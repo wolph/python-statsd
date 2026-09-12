@@ -199,3 +199,12 @@ in behaviour tends to tell you which paragraph it just made wrong.
 - Issues: <https://github.com/WoLpH/python-statsd/issues>
 - Statsd: <https://github.com/etsy/statsd>
 - Graphite: <https://graphiteapp.org/>
+
+## Support
+
+python-statsd is maintained by [Rick van Hattem](https://github.com/wolph) in his own time.
+
+If it saved you an afternoon, a tip covers an hour of issue triage:
+[Ko-fi](https://ko-fi.com/wolph_gh) or [GitHub Sponsors](https://github.com/sponsors/wolph).
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/wolph_gh)

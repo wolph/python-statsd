@@ -58,6 +58,12 @@ Where to go next
 
    api/index
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Project
+
+   sponsor
+
 Links
 -----
 
