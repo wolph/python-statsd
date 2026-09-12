@@ -1,3 +1,11 @@
+"""Gauges.
+
+A gauge reports the current level of something, such as a queue depth or
+a temperature, and the statsd server remembers the last value it saw.
+Relative updates are sent with the statsd ``+``/``-`` prefix through
+:meth:`Gauge.increment` and :meth:`Gauge.decrement`.
+"""
+
 import decimal
 
 from statsd.client import Client

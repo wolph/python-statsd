@@ -1,3 +1,11 @@
+"""Raw values.
+
+Raw metrics bypass the statsd aggregation entirely and are passed
+straight through to carbon with a timestamp. That makes them useful for
+data that is already summarised, and cheap for data that would otherwise
+cost far more in UDP headers than it does in payload.
+"""
+
 import time
 
 from statsd.client import Client

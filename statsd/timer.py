@@ -1,3 +1,13 @@
+"""Timers.
+
+A timer measures how long something took and lets the statsd server
+compute the percentiles. The measurement is taken with
+:func:`time.perf_counter`, so a clock adjustment cannot turn a duration
+negative, and the same timer can be driven by explicit
+:meth:`Timer.start` and :meth:`Timer.stop` calls, as a context manager,
+or as a decorator.
+"""
+
 import contextlib
 import functools
 import time

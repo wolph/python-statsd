@@ -96,7 +96,8 @@ If a hook fails, fix the issue and commit again.
 ### Code Style
 
 - **Formatter**: ruff (79-character line length)
-- **Quotes**: single quotes for all strings, including docstrings
+- **Quotes**: single quotes for strings, `"""` for docstrings, which is
+  what `ruff format` produces here
 - **Type hints**: required on every function, method and attribute. The
   package ships a `py.typed` marker, so the annotations are part of the
   public contract.

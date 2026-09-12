@@ -1,3 +1,11 @@
+"""Counters.
+
+A counter reports a delta rather than a level, and the statsd server
+adds those deltas up over the flush interval. Increments can be written
+as method calls or with the ``+=`` and ``-=`` operators, whichever reads
+better at the call site.
+"""
+
 from statsd.client import Client
 
 

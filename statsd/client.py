@@ -1,3 +1,12 @@
+"""Metric name handling and client construction.
+
+:class:`Client` owns the dotted metric name and the
+:class:`~statsd.connection.Connection` that carries it, and every metric
+type in this package builds on it. Sub-clients are created through
+:meth:`Client.get_client`, which appends to the name and can switch to a
+different metric type at the same time.
+"""
+
 import logging
 from typing import TYPE_CHECKING, TypeVar, overload
 

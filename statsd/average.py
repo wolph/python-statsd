@@ -1,3 +1,11 @@
+"""Averaged metrics.
+
+The statsd server averages every value it receives for an ``average``
+metric within a flush interval and forwards the single result to
+Graphite. Use it when the mean of a series matters and the individual
+samples do not.
+"""
+
 from statsd.client import Client
 
 

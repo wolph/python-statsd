@@ -1,3 +1,12 @@
+"""The UDP connection to the statsd server.
+
+A connection is a fire-and-forget UDP socket with an optional sample
+rate. Nothing is ever read back, and a failing send is logged rather
+than raised, because losing a metric should not take an application
+down with it. Process-wide defaults live in
+:meth:`Connection.set_defaults`.
+"""
+
 import logging
 import random
 import socket
