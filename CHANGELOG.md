@@ -45,7 +45,8 @@ First release since 2.1.0 (2017). Full modernization of the project.
 - CI: GitHub Actions (Travis removed) with releases published to PyPI
   via Trusted Publishing.
 - Docs: sphinx + furo on readthedocs, with the README written in
-  Markdown and rendered through myst-parser.
+  Markdown, a getting-started and user-guide tree, and every code
+  sample in the README and the docs executed by the test suite.
 - Repo: CodeQL, stale-issue and dependabot workflows, plus
   `CONTRIBUTING.md` and `SECURITY.md`.
 
