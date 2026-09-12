@@ -1,9 +1,14 @@
 """Execute every code sample in the README and the documentation.
 
 Documentation that is never run is documentation that drifts. Each
-``python`` fenced block in the README and in the narrative docs pages is
-executed here, in file order and in a shared namespace, so a sample may
-build on the one above it exactly as a reader would expect.
+``python`` fenced block in the README and in the docs pages is executed
+here, in file order and in a shared namespace, so a sample may build on
+the one above it exactly as a reader would expect.
+
+A block that cannot run in the test environment, such as one importing a
+web framework this package does not depend on, is preceded in the source
+by ``<!-- docs-example: skip -->``. The page says so in prose as well, so
+nobody mistakes an unexecuted block for a verified one.
 
 The autouse ``udp_socket`` fixture from ``conftest.py`` applies here too,
 so the samples exercise the real send path without a packet leaving the
@@ -22,15 +27,32 @@ import statsd
 PROJECT_ROOT = pathlib.Path(__file__).parent.parent
 DOC_SOURCES: tuple[pathlib.Path, ...] = (
     PROJECT_ROOT / 'README.md',
-    *sorted((PROJECT_ROOT / 'docs' / 'getting-started').glob('*.md')),
-    *sorted((PROJECT_ROOT / 'docs' / 'guide').glob('*.md')),
+    *sorted((PROJECT_ROOT / 'docs').glob('*.md')),
 )
-_PYTHON_BLOCK = re.compile(r'^```python\n(.*?)^```', re.MULTILINE | re.DOTALL)
+SKIP_MARKER = '<!-- docs-example: skip -->'
+_PYTHON_BLOCK = re.compile(
+    r'(?P<skip>' + re.escape(SKIP_MARKER) + r'\s*\n)?^```python\n'
+    r'(?P<code>.*?)^```',
+    re.MULTILINE | re.DOTALL,
+)
 
 
 def python_blocks(path: pathlib.Path) -> list[str]:
-    """Return the ``python`` fenced blocks of a Markdown file."""
-    return _PYTHON_BLOCK.findall(path.read_text())
+    """Return the runnable ``python`` fenced blocks of a Markdown file."""
+    return [
+        match.group('code')
+        for match in _PYTHON_BLOCK.finditer(path.read_text())
+        if not match.group('skip')
+    ]
+
+
+def skipped_blocks(path: pathlib.Path) -> list[str]:
+    """Return the ``python`` blocks the page marks as not executed."""
+    return [
+        match.group('code')
+        for match in _PYTHON_BLOCK.finditer(path.read_text())
+        if match.group('skip')
+    ]
 
 
 def source_id(path: pathlib.Path) -> str:
@@ -72,8 +94,19 @@ def test_doc_samples_execute(
     sample_globals: dict[str, Any],
 ) -> None:
     blocks = python_blocks(path)
-    assert blocks, f'no python samples found in {source_id(path)}'
+    assert blocks, f'no runnable python samples found in {source_id(path)}'
 
     for number, block in enumerate(blocks, start=1):
         code = compile(block, f'{source_id(path)}:block {number}', 'exec')
         exec(code, sample_globals)
+
+
+@pytest.mark.parametrize('path', DOC_SOURCES, ids=source_id)
+def test_skipped_samples_are_declared(path: pathlib.Path) -> None:
+    """A skipped block has to be at least syntactically valid Python.
+
+    The marker excuses a block from running, not from being correct. This
+    still catches a typo in a snippet a reader is going to copy.
+    """
+    for number, block in enumerate(skipped_blocks(path), start=1):
+        compile(block, f'{source_id(path)}:skipped block {number}', 'exec')
