@@ -21,6 +21,7 @@ intersphinx_mapping = {
 }
 
 html_theme = 'furo'
+html_static_path = ['_static']
 
 # superpowers/ holds gitignored agent working docs, not published pages.
 exclude_patterns = ['_build', 'superpowers']

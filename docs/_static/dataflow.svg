@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 210" width="880" height="210" role="img" aria-label="Metrics leave your application over UDP, statsd aggregates them, Graphite stores and graphs them">
+  <title>python-statsd data flow</title>
+  <desc>A counter, a timer and a gauge travel from your application to statsd over UDP, where they are aggregated and forwarded to Graphite for storage and graphing. Every animated element is drawn in its finished state, so a renderer that ignores animation still shows a correct picture.</desc>
+
+  <style>
+    .node { fill: #6e76811f; stroke: #8b949e88; stroke-width: 1.2; }
+    .name { fill: #8b949e; font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .sub  { fill: #8b949e99; font: 400 10px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .cap  { fill: #8b949eaa; font: 400 11px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; }
+    .wire { stroke: #8b949e66; stroke-width: 1.4; stroke-dasharray: 4 4; fill: none; }
+    .pkt  { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #ffffff; }
+    .spark { fill: none; stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
+  </style>
+
+  <!-- your application -->
+  <rect class="node" x="8" y="58" width="152" height="94" rx="10"/>
+  <text class="name" x="84" y="86" text-anchor="middle">your app</text>
+  <text class="sub"  x="84" y="106" text-anchor="middle">counter += 1</text>
+  <text class="sub"  x="84" y="122" text-anchor="middle">timer.time('render')</text>
+  <text class="sub"  x="84" y="138" text-anchor="middle">gauge.send('depth', 18)</text>
+
+  <!-- statsd -->
+  <rect class="node" x="364" y="58" width="152" height="94" rx="10"/>
+  <text class="name" x="440" y="86" text-anchor="middle">statsd</text>
+  <text class="sub"  x="440" y="106" text-anchor="middle">:8125/udp</text>
+  <text class="sub"  x="440" y="124" text-anchor="middle">sums, means, p95</text>
+  <text class="sub"  x="440" y="140" text-anchor="middle">flushed every 10s</text>
+
+  <!-- graphite -->
+  <rect class="node" x="720" y="58" width="152" height="94" rx="10"/>
+  <text class="name" x="796" y="84" text-anchor="middle">graphite</text>
+  <g transform="translate(736 96)">
+    <polyline id="rate" class="spark" stroke="#2ea043"
+              points="0,40 13,32 26,36 39,22 52,27 65,14 78,20 91,8 104,13 120,4"/>
+    <polyline class="spark" stroke="#8250df" stroke-width="1.8" opacity=".7"
+              points="0,46 13,44 26,47 39,41 52,43 65,38 78,40 91,34 104,36 120,31"/>
+    <circle r="3" fill="#2ea043">
+      <animateMotion dur="3.2s" repeatCount="indefinite"
+                     path="M0,40 L13,32 L26,36 L39,22 L52,27 L65,14 L78,20 L91,8 L104,13 L120,4"/>
+    </circle>
+  </g>
+
+  <!-- wires -->
+  <path class="wire" d="M160 105 H364"/>
+  <path class="wire" d="M516 105 H720"/>
+  <text class="cap" x="262" y="42" text-anchor="middle">fire and forget, one UDP packet each</text>
+  <text class="cap" x="618" y="42" text-anchor="middle">aggregated, then stored</text>
+  <text class="cap" x="262" y="182" text-anchor="middle">no reply, no retry, no blocking</text>
+  <text class="cap" x="618" y="182" text-anchor="middle">one series per metric name</text>
+
+  <!-- packets: app to statsd. The base transform parks each packet mid-wire
+       so a still render shows traffic in flight rather than a pile at x=0. -->
+  <g transform="translate(196 0)" opacity="1">
+    <rect x="0" y="96" width="86" height="18" rx="5" fill="#2ea043"/>
+    <text class="pkt" x="43" y="109" text-anchor="middle">requests:1|c</text>
+    <animateTransform attributeName="transform" type="translate" values="166 0; 280 0" dur="2.4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;1;1;0;1" keyTimes="0;0.5;0.86;0.97;1" dur="2.4s" repeatCount="indefinite"/>
+  </g>
+  <g transform="translate(230 0)" opacity="0">
+    <rect x="0" y="96" width="100" height="18" rx="5" fill="#1f6feb"/>
+    <text class="pkt" x="50" y="109" text-anchor="middle">render:12.4|ms</text>
+    <animateTransform attributeName="transform" type="translate" values="166 0; 266 0" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;1;1;0;1" keyTimes="0;0.5;0.86;0.97;1" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
+  </g>
+  <g transform="translate(210 0)" opacity="0">
+    <rect x="0" y="96" width="80" height="18" rx="5" fill="#8250df"/>
+    <text class="pkt" x="40" y="109" text-anchor="middle">depth:18|g</text>
+    <animateTransform attributeName="transform" type="translate" values="166 0; 284 0" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;1;1;0;1" keyTimes="0;0.5;0.86;0.97;1" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
+  </g>
+
+  <!-- packets: statsd to graphite -->
+  <g transform="translate(560 0)" opacity="1">
+    <rect x="0" y="96" width="118" height="18" rx="5" fill="#2ea043"/>
+    <text class="pkt" x="59" y="109" text-anchor="middle">requests.rate 41</text>
+    <animateTransform attributeName="transform" type="translate" values="522 0; 602 0" dur="2.4s" begin="0.4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;1;1;0;1" keyTimes="0;0.5;0.86;0.97;1" dur="2.4s" begin="0.4s" repeatCount="indefinite"/>
+  </g>
+  <g transform="translate(566 0)" opacity="0">
+    <rect x="0" y="96" width="126" height="18" rx="5" fill="#1f6feb"/>
+    <text class="pkt" x="63" y="109" text-anchor="middle">render.p95 31.7</text>
+    <animateTransform attributeName="transform" type="translate" values="522 0; 594 0" dur="2.4s" begin="1.2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;1;1;0;1" keyTimes="0;0.5;0.86;0.97;1" dur="2.4s" begin="1.2s" repeatCount="indefinite"/>
+  </g>
+</svg>

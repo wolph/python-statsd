@@ -1,0 +1,40 @@
+# A local statsd, Graphite and Grafana stack for trying python-statsd out.
+#
+#   docker compose up -d
+#   uv run python examples/send_metrics.py --seconds 120
+#
+# Grafana opens on http://localhost:3000 with a provisioned dashboard and
+# no login. Graphite's own interface is on http://localhost:8080.
+
+services:
+  graphite:
+    image: graphiteapp/graphite-statsd:latest
+    container_name: python-statsd-graphite
+    restart: unless-stopped
+    ports:
+      # Every port is overridable, so the stack fits next to whatever
+      # else you are already running: GRAPHITE_HTTP_PORT=8081 docker compose up
+      - '${GRAPHITE_HTTP_PORT:-8080}:80' # Graphite web and its render API
+      - '${STATSD_PORT:-8125}:8125/udp' # statsd, where this client sends
+      - '${STATSD_ADMIN_PORT:-8126}:8126' # statsd admin interface
+    environment:
+      # Ten-second flushes so a graph appears while you are still watching.
+      STATSD_INTERVAL: '10000'
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: python-statsd-grafana
+    restart: unless-stopped
+    depends_on:
+      - graphite
+    ports:
+      - '${GRAFANA_PORT:-3000}:3000'
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: 'true'
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_AUTH_DISABLE_LOGIN_FORM: 'true'
+      GF_USERS_DEFAULT_THEME: dark
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/python-statsd.json
+    volumes:
+      - ./examples/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./examples/grafana/dashboards:/var/lib/grafana/dashboards:ro
