@@ -1,0 +1,30 @@
+name: Close stale issues
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *' # Run every day at midnight
+
+permissions:
+  contents: read
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@v11
+        with:
+          days-before-stale: 30
+          days-before-close: 7
+          # Pull requests never go stale: a patch is the contributor's
+          # gift and the maintainer's backlog.
+          days-before-pr-stale: -1
+          exempt-issue-labels: in progress,help-wanted,pinned,security,enhancement
+          stale-issue-message: >
+            This issue is stale because it has been open 30 days with no
+            activity. Remove the stale label or comment, or this will be
+            closed in 7 days.

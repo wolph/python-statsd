@@ -1,20 +1,20 @@
 # Changelog
 
-## 3.0.0 (unreleased)
+## 3.0.0 (2026-09-12)
 
 First release since 2.1.0 (2017). Full modernization of the project.
 
 ### Breaking changes
 
-- Python >= 3.10 required; Python 2 support removed.
+- Python >= 3.10 required. Python 2 support removed.
 - Validation errors now raise real exceptions instead of
-  `AssertionError`: `Timer` state misuse raises `RuntimeError`;
+  `AssertionError`. `Timer` state misuse raises `RuntimeError`, and
   non-numeric `Gauge` values raise `TypeError`.
-- `Connection.send` only swallows `OSError` (returning `False`);
+- `Connection.send` only swallows `OSError` (returning `False`), so
   other exceptions now propagate.
 - The nose-specific `setup_package`/`teardown_package` hooks were
   removed from the `statsd` package.
-- `statsd.__about__` was removed; use `statsd.__version__` and the
+- `statsd.__about__` was removed. Use `statsd.__version__` and the
   package metadata instead.
 - The statsd.compat module (Python 2 helpers) was removed.
 
@@ -37,12 +37,16 @@ First release since 2.1.0 (2017). Full modernization of the project.
 
 - Packaging: `pyproject.toml` with the `uv_build` backend
   (`setup.py`/`setup.cfg` removed).
-- Fully type annotated with a `py.typed` marker; checked with strict
+- Fully type annotated with a `py.typed` marker, checked with strict
   mypy, basedpyright, pyrefly and ty.
-- Tests: pytest with 100% line+branch coverage enforced; nose removed.
+- Tests: pytest with 100% line and branch coverage enforced, nose
+  removed.
 - Linting/formatting: ruff.
 - CI: GitHub Actions (Travis removed) with releases published to PyPI
   via Trusted Publishing.
-- Docs: sphinx + furo on readthedocs.
+- Docs: sphinx + furo on readthedocs, with the README written in
+  Markdown and rendered through myst-parser.
+- Repo: CodeQL, stale-issue and dependabot workflows, plus
+  `CONTRIBUTING.md` and `SECURITY.md`.
 
 For older releases, see the git history.
