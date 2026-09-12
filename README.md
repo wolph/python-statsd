@@ -133,7 +133,7 @@ configured and this dashboard loaded, no login in the way:
 
 That screenshot is the stack in this repository, fed by
 `examples/send_metrics.py` through this client. The
-[local stack guide](https://python-statsd.readthedocs.io/en/latest/local-stack.html)
+[local stack guide](https://python-statsd.readthedocs.io/en/stable/local-stack.html)
 covers how statsd renames your metrics on the way through, and what to
 check when nothing shows up.
 
@@ -165,13 +165,13 @@ Pass `disabled=True` to send nothing.
 Full documentation is at
 [python-statsd.readthedocs.io](https://python-statsd.readthedocs.io/).
 
-- [Metrics](https://python-statsd.readthedocs.io/en/latest/metrics.html):
+- [Metrics](https://python-statsd.readthedocs.io/en/stable/metrics.html):
   the five types, how to choose, and the exact bytes each one writes
-- [Connections](https://python-statsd.readthedocs.io/en/latest/connections.html):
+- [Connections](https://python-statsd.readthedocs.io/en/stable/connections.html):
   destinations, sampling, disabling, failure behaviour, threads and forks
-- [Patterns](https://python-statsd.readthedocs.io/en/latest/patterns.html):
+- [Patterns](https://python-statsd.readthedocs.io/en/stable/patterns.html):
   naming, cardinality, client trees, WSGI and Celery integration
-- [Local stack](https://python-statsd.readthedocs.io/en/latest/local-stack.html):
+- [Local stack](https://python-statsd.readthedocs.io/en/stable/local-stack.html):
   docker compose, and how to debug a metric that never arrives
 
 For Django, use [django-statsd](https://github.com/wolph/django-statsd),
