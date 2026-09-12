@@ -15,4 +15,5 @@ tags
 *.orig
 pystatsd/
 tmp/
+.playwright-mcp/
 uv.lock
