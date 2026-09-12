@@ -42,6 +42,31 @@ jobs:
         run: tox
         env:
           TOX_SKIP_MISSING_INTERPRETERS: 'false'
+      - name: Upload coverage data
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-${{ matrix.os }}-${{ matrix.python-version }}
+          path: .tox/.coverage.*
+          include-hidden-files: true
+
+  coverage:
+    needs: [test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.1.0
+        with:
+          activate-environment: true
+      - name: Install tox
+        run: uv pip install '.[tox]'
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: coverage-*
+          path: .tox
+          merge-multiple: true
+      - name: Combine coverage and enforce the threshold
+        run: tox -e coverage
 
   lint:
     runs-on: ubuntu-latest

@@ -88,6 +88,11 @@ To run a single environment:
 uv run tox -e mypy
 ```
 
+Each test environment writes its own coverage data, and the `coverage`
+environment combines them and enforces the 100% threshold over the whole
+matrix. CI does the same across the three operating systems, so a line
+exercised only on Windows still counts.
+
 ### Pre-commit Hooks
 
 Lefthook runs these checks in parallel on every commit:

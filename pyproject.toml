@@ -79,6 +79,12 @@ addopts = [
 source = ["statsd", "tests"]
 branch = true
 
+[tool.coverage.paths]
+# Map the per-env and per-runner checkouts onto one set of paths so
+# `coverage combine` merges them instead of reporting them separately.
+source = ["statsd", "*/statsd", "*\\statsd"]
+tests = ["tests", "*/tests", "*\\tests"]
+
 [tool.coverage.report]
 fail_under = 100
 show_missing = true
