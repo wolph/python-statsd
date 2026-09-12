@@ -43,6 +43,14 @@ class Client:
         name: str | bytes,
         connection: Connection | None = None,
     ) -> None:
+        """Build a client that prefixes its metrics with `name`.
+
+        :keyword name: The name to prefix every metric with
+        :type name: str
+        :keyword connection: The connection to send through, a default
+            one is created when this is omitted
+        :type connection: :class:`~statsd.connection.Connection`
+        """
         #: The name of the client, everything sent from this client will
         #: be prefixed by name
         self.name: str = self._get_name(name)
@@ -56,6 +64,12 @@ class Client:
 
     @classmethod
     def _get_name(cls, *name_parts: str | bytes | None) -> str:
+        """Join the non-empty parts into a dotted metric name.
+
+        Empty and `None` parts are dropped, which is how
+        :meth:`~statsd.timer.Timer.time` reports under the sub-client's
+        own name, and `bytes` parts are decoded.
+        """
         parts: list[str] = []
         for part in name_parts:
             if isinstance(part, bytes):
@@ -159,7 +173,13 @@ class Client:
         return self.get_client(name=name, class_=Timer)
 
     def __repr__(self) -> str:
+        """Show the type, the metric name and the connection behind it."""
         return f'<{type(self).__name__}:{self.name}@{self.connection!r}>'
 
     def _send(self, data: dict[str, object]) -> bool:
+        """Hand the payload to the connection.
+
+        Subclasses override this to intercept sending, which is what
+        :class:`~statsd.timer.Timer` does to apply its threshold.
+        """
         return self.connection.send(data)

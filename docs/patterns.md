@@ -220,9 +220,9 @@ than letting a failed task leak an entry, which the `pop` above does.
 
 ## Production notes
 
-Sample the high-frequency paths and leave the rare events alone. A counter
+My rule of thumb is the same one the connections page states: a counter
 incremented on every request is a fine candidate for `sample_rate=0.1`, and
-a counter for failed payments is not: at one failure an hour, sampling
+a counter for failed payments is not. At one failure an hour, sampling
 means you hear about one of them per day.
 
 Give each deployment its own prefix if several share a statsd server. A

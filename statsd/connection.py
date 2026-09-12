@@ -65,6 +65,21 @@ class Connection:
         sample_rate: float | None = None,
         disabled: bool | None = None,
     ) -> None:
+        """Open a UDP socket to the statsd server.
+
+        Every argument falls back to the class default when it is falsy,
+        so `sample_rate=0` means "use the default" rather than "never
+        send". Use `disabled` to send nothing.
+
+        :keyword host: The statsd host to connect to
+        :type host: str
+        :keyword port: The statsd port to connect to
+        :type port: int
+        :keyword sample_rate: The sample rate, `1` meaning always
+        :type sample_rate: float
+        :keyword disabled: Turn off sending UDP packets
+        :type disabled: bool
+        """
         self._host: str = host or self.default_host
         self._port: int = int(port or self.default_port)
         self._sample_rate: float = sample_rate or self.default_sample_rate
@@ -126,13 +141,17 @@ class Connection:
         return True
 
     def __del__(self) -> None:
-        # Close the UDP socket explicitly for pypy; guarded because
-        # __del__ also runs when __init__ failed before creating it.
+        """Close the UDP socket, explicitly for pypy.
+
+        The lookup is guarded because `__del__` also runs when
+        `__init__` raised before the socket existed.
+        """
         udp_sock: socket.socket | None = getattr(self, 'udp_sock', None)
         if udp_sock is not None:
             udp_sock.close()
 
     def __repr__(self) -> str:
+        """Show the destination and the sample rate in use."""
         return (
             f'<{type(self).__name__}[{self._host}:{self._port}]'
             f' P({self._sample_rate:.1f})>'

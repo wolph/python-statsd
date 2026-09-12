@@ -1,3 +1,5 @@
+"""Sphinx configuration for the python-statsd documentation."""
+
 import importlib.metadata
 
 project = 'python-statsd'

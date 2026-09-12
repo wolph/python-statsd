@@ -1,4 +1,4 @@
-"""Record the README terminal demo as an asciicast.
+r"""Record the README terminal demo as an asciicast.
 
 Runs ``docs/demo.sh`` under a pty and writes every chunk the terminal
 emits, with the time it was emitted, in asciicast v2 format. The result is

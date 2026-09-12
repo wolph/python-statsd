@@ -49,6 +49,16 @@ class Timer(Client):
         connection: Connection | None = None,
         min_send_threshold: float = -1,
     ) -> None:
+        """Build a timer that is not yet running.
+
+        :keyword name: The name to prefix every timing with
+        :type name: str
+        :keyword connection: The connection to send through
+        :type connection: :class:`~statsd.connection.Connection`
+        :keyword min_send_threshold: Timings at or below this many
+            milliseconds are dropped, `-1` sends everything
+        :type min_send_threshold: float
+        """
         super().__init__(name, connection=connection)
         self._start: float | None = None
         self._last: float | None = None
@@ -115,6 +125,7 @@ class Timer(Client):
         return self.send(subname, self._stop - self._start)
 
     def __enter__(self) -> 'Timer':
+        """Start the timer, so `with Timer(name):` times the block."""
         return self.start()
 
     def __exit__(
@@ -124,7 +135,8 @@ class Timer(Client):
         exc_tb: TracebackType | None,
     ) -> None:
         """Stop the timer and send the total, also when the block
-        raised an exception."""
+        raised an exception.
+        """
         self.stop()
 
     def _decorate(
@@ -133,11 +145,17 @@ class Timer(Client):
         function: Callable[_P, _R],
         class_: type['Timer'] | None = None,
     ) -> Callable[_P, _R]:
+        """Wrap `function` so each call is timed under `name`.
+
+        A fresh timer is built per call, so the wrapper is safe to use on
+        recursive functions and from several threads at once.
+        """
         if class_ is None:
             class_ = Timer
 
         @functools.wraps(function)
         def _decorator(*args: _P.args, **kwargs: _P.kwargs) -> _R:
+            """Time one call of the wrapped function."""
             timer = self.get_client(name, class_)
             timer.start()
             try:

@@ -33,6 +33,11 @@ ignore = [
     'ISC001', # String concatenation with implicit str conversion
     'SIM108', # Ternary operators are not always more readable
     'RUF100', # Unused noqa directives
+    'D203', # 1 blank line required before class docstring, conflicts with D211
+    'D213', # Multi-line summary should start at the second line
+    'D400', # First line should end with a period
+    'D401', # First line of docstring should be in imperative mood
+    'D415', # First line should end with a period, question mark or exclamation point
 ]
 
 select = [
@@ -42,6 +47,7 @@ select = [
     'C4', # flake8-comprehensions
     'C90', # mccabe
     'COM', # flake8-commas
+    'D', # pydocstyle: every module, class and function carries a docstring
     'E', # pycodestyle error ('W' for warning)
     'F', # pyflakes
     'FA', # flake8-future-annotations
@@ -63,8 +69,8 @@ select = [
 ]
 
 [lint.per-file-ignores]
-'tests/*' = ['SIM115', 'SIM117', 'T201', 'B007', 'INP001']
-'conftest.py' = ['INP001']
+'tests/*' = ['SIM115', 'SIM117', 'T201', 'B007', 'INP001', 'D']  # test names carry the intent
+'conftest.py' = ['INP001', 'D']
 'examples/*' = ['INP001', 'T201'] # standalone scripts, meant to be run and to print
 'docs/*' = ['INP001', 'RUF012', 'A001', 'T201'] # record_demo.py reports what it recorded
 
@@ -87,6 +93,10 @@ skip-magic-trailing-comma = false
 exclude = [
     '__init__.py',
 ]
+
+[lint.pydocstyle]
+convention = 'pep257'
+ignore-decorators = ['typing.overload']
 
 [lint.pycodestyle]
 max-line-length = 79

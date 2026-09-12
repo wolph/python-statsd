@@ -52,9 +52,10 @@ statsd.Counter('app', connection).increment('requests')
 ```
 
 That puts `app.requests:1|c|@0.5` on the wire, and the server reads it as
-roughly two events. Sampling trades accuracy for packets, which suits
-high-frequency counters and timers and ruins rare events, where every
-single one matters and half of them are now gone.
+roughly two events. Sampling trades accuracy for packets. I turn it on
+when a counter is firing more than a few hundred times a second and leave
+it off everywhere else, because on a rare event it is not a trade at all:
+every packet dropped is an event nobody will ever see.
 
 Here is the sharp edge. A falsy argument means "use the default", not
 "use zero":
