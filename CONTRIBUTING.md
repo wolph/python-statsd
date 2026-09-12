@@ -65,6 +65,11 @@ Tests never touch the network. `conftest.py` installs a fake UDP socket, so
 a test that wants to inspect what was sent reads it from that fake rather
 than from a real statsd server.
 
+`tests/test_docs_examples.py` executes every `python` block in `README.md`
+and in `docs/getting-started/` and `docs/guide/`, in file order and in a
+shared namespace. A sample that stops working fails the suite, so keep the
+blocks runnable: no pseudo-code, and no prompts to strip.
+
 ### Everything CI Runs, Locally
 
 `tox.ini` is the single source of truth for the matrix, and CI drives the

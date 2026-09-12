@@ -38,6 +38,21 @@ class Connection:
         sample_rate: float = 1,
         disabled: bool = False,
     ) -> None:
+        """Set the defaults for every connection created after this call
+
+        The values are stored on the class, so connections that already
+        exist keep the settings they were built with. Call this once
+        during startup, before the application creates its clients.
+
+        :keyword host: The statsd host to connect to
+        :type host: str
+        :keyword port: The statsd port to connect to
+        :type port: int
+        :keyword sample_rate: The sample rate, `1` meaning always
+        :type sample_rate: float
+        :keyword disabled: Turn off sending UDP packets
+        :type disabled: bool
+        """
         cls.default_host = host
         cls.default_port = port
         cls.default_sample_rate = sample_rate

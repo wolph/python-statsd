@@ -44,49 +44,55 @@ uv pip install python-statsd
 #### Timers
 
 ```python
->>> import statsd
->>>
->>> timer = statsd.Timer('MyApplication')
->>> timer.start()
->>> # do something here
->>> timer.stop('SomeTimer')
+import statsd
+
+timer = statsd.Timer('MyApplication')
+timer.start()
+# do something here
+timer.stop('SomeTimer')
 ```
 
 Or as a context manager (the metric is also sent when the block raises an
 exception):
 
 ```python
->>> with statsd.Timer('MyApplication').time('SomeTimer'):
-...     pass  # do something here
+import statsd
+
+with statsd.Timer('MyApplication').time('SomeTimer'):
+    pass  # do something here
 ```
 
 Or as a decorator:
 
 ```python
->>> timer = statsd.Timer('MyApplication')
->>> @timer.decorate
-... def some_function():
-...     pass  # resulting timer name: MyApplication.some_function
+import statsd
+
+timer = statsd.Timer('MyApplication')
+
+
+@timer.decorate
+def some_function():
+    pass  # resulting timer name: MyApplication.some_function
 ```
 
 #### Counters
 
 ```python
->>> import statsd
->>>
->>> counter = statsd.Counter('MyApplication')
->>> # do something here
->>> counter += 1
+import statsd
+
+counter = statsd.Counter('MyApplication')
+# do something here
+counter += 1
 ```
 
 #### Gauge
 
 ```python
->>> import statsd
->>>
->>> gauge = statsd.Gauge('MyApplication')
->>> # do something here
->>> gauge.send('SomeName', 42)
+import statsd
+
+gauge = statsd.Gauge('MyApplication')
+# do something here
+gauge.send('SomeName', 42)
 ```
 
 #### Raw
@@ -97,11 +103,11 @@ mechanism: sending a lot of samples could use a lot of bandwidth (more b/w is
 used in udp headers than data for a gauge, for instance).
 
 ```python
->>> import statsd
->>>
->>> raw = statsd.Raw('MyApplication')
->>> # do something here
->>> raw.send('SomeName', 42, timestamp=1234567890)
+import statsd
+
+raw = statsd.Raw('MyApplication')
+# do something here
+raw.send('SomeName', 42, timestamp=1234567890)
 ```
 
 The raw type wants a timestamp in seconds since the epoch (the standard unix
@@ -111,11 +117,11 @@ the current time is used.
 #### Average
 
 ```python
->>> import statsd
->>>
->>> average = statsd.Average('MyApplication')
->>> # do something here
->>> average.send('SomeName', 123)
+import statsd
+
+average = statsd.Average('MyApplication')
+# do something here
+average.send('SomeName', 123)
 ```
 
 #### Connection settings
@@ -124,9 +130,11 @@ If you need some settings other than the defaults for your `Connection`, you
 can use `Connection.set_defaults()`:
 
 ```python
->>> import statsd
->>> statsd.Connection.set_defaults(
-...     host='localhost', port=8125, sample_rate=1, disabled=False)
+import statsd
+
+statsd.Connection.set_defaults(
+    host='localhost', port=8125, sample_rate=1, disabled=False
+)
 ```
 
 Every interaction with statsd after these are set will use whatever you
@@ -143,50 +151,51 @@ Defaults:
 ## Advanced Usage
 
 ```python
->>> import statsd
->>>
->>> # Open a connection to `server` on port `1234` with a
->>> # `50%` sample rate
->>> statsd_connection = statsd.Connection(
-...     host='server',
-...     port=1234,
-...     sample_rate=0.5,
-... )
->>>
->>> # Create a client for this application
->>> statsd_client = statsd.Client(__name__, statsd_connection)
->>>
->>> class SomeClass:
-...     def __init__(self):
-...         # Create a client specific for this class
-...         self.statsd_client = statsd_client.get_client(
-...             self.__class__.__name__)
-...
-...     def do_something(self):
-...         # Create a `timer` client
-...         timer = self.statsd_client.get_client(
-...             class_=statsd.Timer)
-...
-...         # start the measurement
-...         timer.start()
-...
-...         # do something
-...         timer.intermediate('intermediate_value')
-...
-...         # do something else
-...         timer.stop('total')
+import statsd
+
+# Open a connection to `server` on port `1234` with a
+# `50%` sample rate
+statsd_connection = statsd.Connection(
+    host='server',
+    port=1234,
+    sample_rate=0.5,
+)
+
+# Create a client for this application
+statsd_client = statsd.Client(__name__, statsd_connection)
+
+
+class SomeClass:
+    def __init__(self):
+        # Create a client specific for this class
+        self.statsd_client = statsd_client.get_client(type(self).__name__)
+
+    def do_something(self):
+        # Create a `timer` client
+        timer = self.statsd_client.get_client(class_=statsd.Timer)
+
+        # start the measurement
+        timer.start()
+
+        # do something
+        timer.intermediate('intermediate_value')
+
+        # do something else
+        timer.stop('total')
 ```
 
 If there is a need to turn *OFF* the service and avoid sending UDP messages,
 the `Connection` class can be disabled with the `disabled` argument:
 
 ```python
->>> statsd_connection = statsd.Connection(
-...     host='server',
-...     port=1234,
-...     sample_rate=0.5,
-...     disabled=True,
-... )
+import statsd
+
+statsd_connection = statsd.Connection(
+    host='server',
+    port=1234,
+    sample_rate=0.5,
+    disabled=True,
+)
 ```
 
 If logging's level is set to debug the `Connection` object will inform it is
