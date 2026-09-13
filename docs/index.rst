@@ -33,6 +33,8 @@ that is down costs you graphs rather than requests.
 Where to go next
 ----------------
 
+- :doc:`quickstart` gets you from nothing to metrics on a graph, in two
+  tracks: one minute without Docker, five minutes with.
 - :doc:`metrics` covers the five metric types, how to choose between them,
   and the exact bytes each one writes.
 - :doc:`connections` covers destinations, sampling, disabling and what
@@ -47,6 +49,7 @@ Where to go next
    :maxdepth: 2
    :caption: Guide
 
+   quickstart
    metrics
    connections
    patterns

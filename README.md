@@ -171,6 +171,8 @@ Pass `disabled=True` to send nothing.
 Full documentation is at
 [python-statsd.readthedocs.io](https://python-statsd.readthedocs.io/).
 
+- [Quickstart](https://python-statsd.readthedocs.io/en/stable/quickstart.html):
+  nothing to metrics on a graph, in two tracks
 - [Metrics](https://python-statsd.readthedocs.io/en/stable/metrics.html):
   the five types, how to choose, and the exact bytes each one writes
 - [Connections](https://python-statsd.readthedocs.io/en/stable/connections.html):
