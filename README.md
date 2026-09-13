@@ -10,7 +10,7 @@
   <a href="https://github.com/WoLpH/python-statsd/actions/workflows/ci.yml"><img src="https://github.com/WoLpH/python-statsd/actions/workflows/ci.yml/badge.svg?branch=master" alt="Test status"></a>
   <a href="https://github.com/WoLpH/python-statsd/actions/workflows/codeql.yml"><img src="https://github.com/WoLpH/python-statsd/actions/workflows/codeql.yml/badge.svg?branch=develop" alt="CodeQL status"></a>
   <a href="https://python-statsd.readthedocs.io/"><img src="https://img.shields.io/readthedocs/python-statsd?logo=readthedocs&logoColor=white" alt="Documentation"></a>
-  <a href="https://github.com/WoLpH/python-statsd/actions/workflows/ci.yml"><img src="https://img.shields.io/badge/coverage-100%25-brightgreen" alt="Coverage, enforced in CI"></a>
+  <a href="https://coveralls.io/github/wolph/python-statsd?branch=develop"><img src="https://coveralls.io/repos/github/wolph/python-statsd/badge.svg?branch=develop" alt="Coverage status"></a>
   <br>
   <a href="https://pypi.org/project/python-statsd/"><img src="https://img.shields.io/pypi/v/python-statsd.svg?logo=pypi&logoColor=white" alt="PyPI version"></a>
   <a href="https://pypi.org/project/python-statsd/"><img src="https://img.shields.io/pypi/pyversions/python-statsd.svg?logo=python&logoColor=white" alt="Supported Python versions"></a>

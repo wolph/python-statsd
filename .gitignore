@@ -12,6 +12,7 @@ cover/
 htmlcov/
 docs/_build/
 tags
+coverage.lcov
 *.orig
 pystatsd/
 tmp/

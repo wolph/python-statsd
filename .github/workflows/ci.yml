@@ -67,6 +67,12 @@ jobs:
           merge-multiple: true
       - name: Combine coverage and enforce the threshold
         run: tox -e coverage
+      - name: Report coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          file: coverage.lcov
+          format: lcov
+          fail-on-error: true
 
   lint:
     runs-on: ubuntu-latest
