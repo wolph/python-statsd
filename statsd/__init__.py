@@ -1,5 +1,8 @@
-"""statsd is a client for Etsy's statsd server, a front end/proxy for
-the Graphite stats collection and graphing server.
+"""A client for statsd, the metrics aggregation daemon.
+
+statsd started at Etsy and now lives at https://github.com/statsd/statsd.
+It sits in front of Graphite, aggregating the metrics this client sends
+over UDP and flushing the results onwards.
 """
 
 import importlib.metadata

@@ -116,7 +116,7 @@ class Gauge(Client):
         """Set the gauge to `value`
 
         Gauges work like this (from the statsd docs,
-        https://github.com/etsy/statsd/blob/master/docs/metric_types.md):
+        https://github.com/statsd/statsd/blob/master/docs/metric_types.md):
 
             Adding a sign to the gauge value will change the value,
             rather than setting it.

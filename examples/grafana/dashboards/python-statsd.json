@@ -18,11 +18,11 @@
       "targets": [
         {
           "refId": "A",
-          "target": "alias(stats.demo.requests, 'requests/s')"
+          "target": "alias(stats.counters.demo.requests.rate, 'requests/s')"
         },
         {
           "refId": "B",
-          "target": "alias(stats.demo.errors, 'errors/s')"
+          "target": "alias(stats.counters.demo.errors.rate, 'errors/s')"
         }
       ],
       "fieldConfig": {
@@ -140,7 +140,7 @@
       "targets": [
         {
           "refId": "A",
-          "target": "alias(stats.statsd.packets_received, 'packets')"
+          "target": "alias(stats.counters.statsd.packets_received.count, 'packets')"
         }
       ],
       "fieldConfig": {

@@ -5,9 +5,10 @@ Python StatsD Client
    :alt: Metrics leave your application over UDP, statsd aggregates them, Graphite stores and graphs them
    :width: 100%
 
-``python-statsd`` is a client for Etsy's statsd server, a front end and
-proxy for the Graphite stats collection and graphing server. It supports
-Python 3.10 and newer, and it has no dependencies.
+``python-statsd`` is a client for `statsd <https://github.com/statsd/statsd>`_,
+the metrics aggregation daemon that started at Etsy and now lives in its own
+organisation, sitting in front of Graphite. It supports Python 3.10 and
+newer, and it has no dependencies.
 
 Install it, point it at a server, and send something:
 
@@ -72,7 +73,7 @@ Links
 - Reporting bugs: https://github.com/WoLpH/python-statsd/issues
 - Contributing: https://github.com/WoLpH/python-statsd/blob/develop/CONTRIBUTING.md
 - Django integration: https://github.com/wolph/django-statsd
-- Statsd: https://github.com/etsy/statsd
+- Statsd: https://github.com/statsd/statsd
 - Graphite: https://graphiteapp.org/
 
 Indices and Tables

@@ -21,8 +21,9 @@
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Linted and formatted with ruff"></a>
 </p>
 
-`python-statsd` is a client for Etsy's statsd server, a front end and proxy
-for the Graphite stats collection and graphing server. It supports Python
+`python-statsd` is a client for [statsd](https://github.com/statsd/statsd),
+the metrics aggregation daemon that started at Etsy and now lives in its own
+organisation, sitting in front of Graphite. It supports Python
 3.10 and newer, and it has no dependencies.
 
 ```bash
@@ -114,16 +115,19 @@ queries.increment()  # app.database.queries:1|c
 
 ## See it working
 
-The repository ships a compose file with statsd, Graphite and Grafana, so
-you can watch a metric arrive instead of taking anyone's word for it:
+The repository ships a compose file with the real
+[statsd](https://github.com/statsd/statsd), Graphite and Grafana, so you
+can watch a metric arrive instead of taking anyone's word for it:
 
 ```bash
-docker compose up -d
+docker compose up -d --wait
 uv run python examples/send_metrics.py --seconds 120
 ```
 
-Then open <http://localhost:3000>. Grafana comes up with the datasource
-configured and this dashboard loaded, no login in the way:
+`--wait` returns once every service reports healthy. No local Python?
+`docker compose --profile demo up -d --wait` generates the traffic from a
+container instead. Then open <http://localhost:3000>: Grafana has the
+datasource configured and this dashboard loaded, no login in the way:
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/wolph/python-statsd/develop/docs/_static/grafana.png"
@@ -132,7 +136,9 @@ configured and this dashboard loaded, no login in the way:
 </p>
 
 That screenshot is the stack in this repository, fed by
-`examples/send_metrics.py` through this client. The
+`examples/send_metrics.py` through this client. statsd runs from
+`examples/statsd/config.js`, so the aggregation you see is configured in
+a file you can read and change. The
 [local stack guide](https://python-statsd.readthedocs.io/en/stable/local-stack.html)
 covers how statsd renames your metrics on the way through, and what to
 check when nothing shows up.
@@ -197,7 +203,7 @@ in behaviour tends to tell you which paragraph it just made wrong.
 
 - Source: <https://github.com/WoLpH/python-statsd>
 - Issues: <https://github.com/WoLpH/python-statsd/issues>
-- Statsd: <https://github.com/etsy/statsd>
+- Statsd: <https://github.com/statsd/statsd>
 - Graphite: <https://graphiteapp.org/>
 
 ## Support

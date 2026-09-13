@@ -1,32 +1,72 @@
-# A local statsd, Graphite and Grafana stack for trying python-statsd out.
+# A working statsd, Graphite and Grafana stack for trying python-statsd out.
 #
 #   docker compose up -d
 #   uv run python examples/send_metrics.py --seconds 120
+#   open http://localhost:3000
 #
-# Grafana opens on http://localhost:3000 with a provisioned dashboard and
-# no login. Graphite's own interface is on http://localhost:8080.
+# Grafana comes up with the datasource configured and a dashboard loaded,
+# and no login prompt. Graphite's own interface is on http://localhost:8080.
+#
+# Every port is overridable, so the stack fits next to whatever else you
+# are running:
+#
+#   GRAFANA_PORT=3001 STATSD_PORT=18125 docker compose up -d
 
 services:
+  # The real statsd from https://github.com/statsd/statsd, reading the
+  # config in examples/statsd/config.js. This is what your packets hit.
+  statsd:
+    image: statsd/statsd:latest
+    container_name: python-statsd-statsd
+    restart: unless-stopped
+    depends_on:
+      graphite:
+        condition: service_healthy
+    ports:
+      - '${STATSD_PORT:-8125}:8125/udp' # where this client sends
+      - '${STATSD_ADMIN_PORT:-8126}:8126' # `echo counters | nc localhost 8126`
+    volumes:
+      - ./examples/statsd/config.js:/usr/src/app/config.js:ro
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "require('net').connect(8126,'127.0.0.1').on('connect',()=>process.exit(0)).on('error',()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Storage and the query API: carbon takes the aggregates from statsd on
+  # 2003 and graphite-web serves them. The image bundles a statsd of its
+  # own, which this stack does not use.
   graphite:
     image: graphiteapp/graphite-statsd:latest
     container_name: python-statsd-graphite
     restart: unless-stopped
     ports:
-      # Every port is overridable, so the stack fits next to whatever
-      # else you are already running: GRAPHITE_HTTP_PORT=8081 docker compose up
       - '${GRAPHITE_HTTP_PORT:-8080}:80' # Graphite web and its render API
-      - '${STATSD_PORT:-8125}:8125/udp' # statsd, where this client sends
-      - '${STATSD_ADMIN_PORT:-8126}:8126' # statsd admin interface
-    environment:
-      # Ten-second flushes so a graph appears while you are still watching.
-      STATSD_INTERVAL: '10000'
+    volumes:
+      - graphite-storage:/opt/graphite/storage
+    healthcheck:
+      # 127.0.0.1, not localhost: busybox wget resolves localhost to ::1
+      # first and nginx here listens on IPv4 only.
+      test: ['CMD', 'wget', '--spider', '-q', 'http://127.0.0.1/render']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   grafana:
     image: grafana/grafana:latest
     container_name: python-statsd-grafana
     restart: unless-stopped
     depends_on:
-      - graphite
+      graphite:
+        condition: service_healthy
     ports:
       - '${GRAFANA_PORT:-3000}:3000'
     environment:
@@ -38,3 +78,31 @@ services:
     volumes:
       - ./examples/grafana/provisioning:/etc/grafana/provisioning:ro
       - ./examples/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-storage:/var/lib/grafana
+    healthcheck:
+      test: ['CMD', 'curl', '-fsS', 'http://127.0.0.1:3000/api/health']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  # Optional traffic generator, so the stack is useful without a local
+  # Python setup: `docker compose --profile demo up -d`. It installs
+  # python-statsd from PyPI and runs examples/send_metrics.py against the
+  # statsd service.
+  demo:
+    image: python:3.13-slim
+    container_name: python-statsd-demo
+    profiles: ['demo']
+    depends_on:
+      statsd:
+        condition: service_healthy
+    volumes:
+      - ./examples:/app:ro
+    command: >
+      sh -c "pip install --quiet --no-cache-dir --root-user-action=ignore python-statsd &&
+             python /app/send_metrics.py --host statsd --port 8125 --seconds ${DEMO_SECONDS:-3600}"
+
+volumes:
+  graphite-storage:
+  grafana-storage:
