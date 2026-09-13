@@ -138,7 +138,11 @@ datasource configured and this dashboard loaded, no login in the way:
 That screenshot is the stack in this repository, fed by
 `examples/send_metrics.py` through this client. statsd runs from
 `examples/statsd/config.js`, so the aggregation you see is configured in
-a file you can read and change. The
+a file you can read and change.
+
+Already running Grafana? Import the dashboard straight into it from
+[`examples/grafana/import/python-statsd.json`](https://github.com/wolph/python-statsd/blob/develop/examples/grafana/import/python-statsd.json),
+which asks which datasource to use instead of assuming one. The
 [local stack guide](https://python-statsd.readthedocs.io/en/stable/local-stack.html)
 covers how statsd renames your metrics on the way through, and what to
 check when nothing shows up.

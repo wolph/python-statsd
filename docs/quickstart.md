@@ -96,7 +96,11 @@ Your metric shows up in Graphite as
 `stats.counters.myapp.hits.rate`. statsd renames things on the way
 through, and the [local stack page](local-stack.md) has the mapping table.
 
-**5. Stop it when you are done.**
+**5. Already have a Grafana?** The dashboard and the datasource and
+provider files are in the repository, ready to lift into it. The
+[local stack page](local-stack.md) lists each one with an import URL.
+
+**6. Stop it when you are done.**
 
 ```bash
 docker compose down
