@@ -7,18 +7,18 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/wolph/python-statsd/actions/workflows/ci.yml?query=branch%3Amaster"><img src="https://github.com/wolph/python-statsd/actions/workflows/ci.yml/badge.svg?branch=master" alt="CI on master"></a>
-  <a href="https://github.com/WoLpH/python-statsd/actions/workflows/codeql.yml?query=branch%3Amaster"><img src="https://github.com/WoLpH/python-statsd/actions/workflows/codeql.yml/badge.svg?branch=master" alt="CodeQL status"></a>
-  <a href="https://python-statsd.readthedocs.io/"><img src="https://img.shields.io/readthedocs/python-statsd?logo=readthedocs&logoColor=white&style=plastic" alt="Documentation"></a>
-  <a href="https://coveralls.io/github/wolph/python-statsd?branch=master"><img src="https://coveralls.io/repos/github/wolph/python-statsd/badge.svg?branch=master" alt="Coverage on master"></a>
+  <a href="https://github.com/wolph/python-statsd/actions/workflows/ci.yml?query=branch%3Amaster"><img src="https://img.shields.io/github/actions/workflow/status/wolph/python-statsd/ci.yml?branch=master&label=CI&style=flat-square&labelColor=555" alt="CI on master"></a>
+  <a href="https://github.com/WoLpH/python-statsd/actions/workflows/codeql.yml?query=branch%3Amaster"><img src="https://img.shields.io/github/actions/workflow/status/wolph/python-statsd/codeql.yml?branch=master&label=CodeQL&style=flat-square&labelColor=555" alt="CodeQL status"></a>
+  <a href="https://python-statsd.readthedocs.io/"><img src="https://img.shields.io/readthedocs/python-statsd/latest?logo=readthedocs&logoColor=white&style=flat-square&labelColor=555" alt="Documentation"></a>
+  <a href="https://coveralls.io/github/wolph/python-statsd?branch=master"><img src="https://img.shields.io/coverallsCoverage/github/wolph/python-statsd?branch=master&style=flat-square&labelColor=555" alt="Coverage on master"></a>
   <br>
-  <a href="https://pypi.org/project/python-statsd/"><img src="https://img.shields.io/pypi/v/python-statsd.svg?logo=pypi&logoColor=white&style=plastic" alt="PyPI version"></a>
-  <a href="https://pypi.org/project/python-statsd/"><img src="https://img.shields.io/pypi/pyversions/python-statsd.svg?logo=python&logoColor=white&style=plastic" alt="Supported Python versions"></a>
-  <a href="https://pepy.tech/projects/python-statsd"><img src="https://static.pepy.tech/badge/python-statsd/month" alt="Monthly downloads"></a>
-  <a href="https://github.com/WoLpH/python-statsd/blob/develop/LICENSE"><img src="https://img.shields.io/pypi/l/python-statsd.svg?style=plastic" alt="BSD-3-Clause licence"></a>
+  <a href="https://pypi.org/project/python-statsd/"><img src="https://img.shields.io/pypi/v/python-statsd.svg?logo=pypi&logoColor=white&style=flat-square&labelColor=555&color=007ec6" alt="PyPI version"></a>
+  <a href="https://pypi.org/project/python-statsd/"><img src="https://img.shields.io/pypi/pyversions/python-statsd.svg?logo=python&logoColor=white&style=flat-square&labelColor=555&color=007ec6" alt="Supported Python versions"></a>
+  <a href="https://pepy.tech/projects/python-statsd"><img src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fapi.pepy.tech%2Fbadge%2Fpython-statsd%2Fmonth&query=%28%2F%2F%2A%5Blocal-name%28%29%3D%22text%22%5D%29%5Blast%28%29%5D&label=downloads%2Fmonth&style=flat-square&labelColor=555&color=007ec6" alt="Monthly downloads"></a>
+  <a href="https://github.com/WoLpH/python-statsd/blob/develop/LICENSE"><img src="https://img.shields.io/pypi/l/python-statsd.svg?style=flat-square&labelColor=555&color=007ec6" alt="BSD-3-Clause licence"></a>
   <br>
   <a href="https://github.com/WoLpH/python-statsd/actions/workflows/ci.yml?query=branch%3Amaster">Type checked: mypy, basedpyright, pyrefly and ty</a>
-  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=plastic" alt="Linted and formatted with ruff"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fastral-sh%2Fruff%2Fmain%2Fassets%2Fbadge%2Fv2.json&style=flat-square&labelColor=555&color=007ec6" alt="Linted and formatted with ruff"></a>
 </p>
 
 `python-statsd` is a client for [statsd](https://github.com/statsd/statsd),
