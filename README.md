@@ -7,17 +7,17 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/WoLpH/python-statsd/actions/workflows/ci.yml"><img src="https://github.com/WoLpH/python-statsd/actions/workflows/ci.yml/badge.svg?branch=master" alt="Test status"></a>
-  <a href="https://github.com/WoLpH/python-statsd/actions/workflows/codeql.yml"><img src="https://github.com/WoLpH/python-statsd/actions/workflows/codeql.yml/badge.svg?branch=develop" alt="CodeQL status"></a>
+  <a href="https://github.com/wolph/python-statsd/actions/workflows/ci.yml?query=branch%3Amaster"><img src="https://github.com/wolph/python-statsd/actions/workflows/ci.yml/badge.svg?branch=master" alt="CI on master"></a>
+  <a href="https://github.com/WoLpH/python-statsd/actions/workflows/codeql.yml?query=branch%3Amaster"><img src="https://github.com/WoLpH/python-statsd/actions/workflows/codeql.yml/badge.svg?branch=master" alt="CodeQL status"></a>
   <a href="https://python-statsd.readthedocs.io/"><img src="https://img.shields.io/readthedocs/python-statsd?logo=readthedocs&logoColor=white" alt="Documentation"></a>
-  <a href="https://coveralls.io/github/wolph/python-statsd?branch=develop"><img src="https://coveralls.io/repos/github/wolph/python-statsd/badge.svg?branch=develop" alt="Coverage status"></a>
+  <a href="https://coveralls.io/github/WoLpH/python-statsd?branch=master"><img src="https://coveralls.io/repos/github/WoLpH/python-statsd/badge.svg?branch=master" alt="Coverage on master"></a>
   <br>
   <a href="https://pypi.org/project/python-statsd/"><img src="https://img.shields.io/pypi/v/python-statsd.svg?logo=pypi&logoColor=white" alt="PyPI version"></a>
   <a href="https://pypi.org/project/python-statsd/"><img src="https://img.shields.io/pypi/pyversions/python-statsd.svg?logo=python&logoColor=white" alt="Supported Python versions"></a>
   <a href="https://pepy.tech/project/python-statsd"><img src="https://static.pepy.tech/badge/python-statsd" alt="Downloads"></a>
   <a href="https://github.com/WoLpH/python-statsd/blob/develop/LICENSE"><img src="https://img.shields.io/pypi/l/python-statsd.svg" alt="BSD-3-Clause licence"></a>
   <br>
-  <a href="https://github.com/WoLpH/python-statsd/actions/workflows/ci.yml"><img src="https://img.shields.io/badge/types-mypy%20%7C%20basedpyright%20%7C%20pyrefly%20%7C%20ty-8957e5" alt="Type checked by four checkers in CI"></a>
+  <a href="https://github.com/WoLpH/python-statsd/actions/workflows/ci.yml?query=branch%3Amaster"><img src="https://img.shields.io/badge/types-mypy%20%7C%20basedpyright%20%7C%20pyrefly%20%7C%20ty-8957e5" alt="Type checked by four checkers in CI"></a>
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Linted and formatted with ruff"></a>
 </p>
 
