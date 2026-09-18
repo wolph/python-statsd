@@ -1,5 +1,5 @@
 [build-system]
-requires = ["uv_build>=0.11.0,<0.13"]
+requires = ["uv_build>=0.12.9,<0.13"]
 build-backend = "uv_build"
 
 [project]
@@ -40,27 +40,27 @@ Funding = "https://github.com/sponsors/wolph"
 
 [project.optional-dependencies]
 docs = [
-    "sphinx>=8.0",
-    "furo>=2025.1",
-    "myst-parser>=4.0",
+    "sphinx>=8.1.3",
+    "furo>=2025.12.19",
+    "myst-parser>=4.0.1",
 ]
 tests = [
-    "pytest>=9.0",
-    "pytest-cov>=7.0",
-    "coverage>=7.0",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "coverage>=7.16.0",
 ]
 dev = [
     "python-statsd[tests]",
-    "ruff>=0.15.0",
-    "mypy>=1.14",
-    "basedpyright>=1.0",
-    "pyrefly>=0.1",
+    "ruff>=0.16.6",
+    "mypy>=2.3.1",
+    "basedpyright>=1.39.10",
+    "pyrefly>=1.2.0",
     "ty",
 ]
 tox = [
-    "tox>=4.0",
-    "tox-uv>=1.0",
-    "tox-gh-actions>=3.0",
+    "tox>=4.61.2",
+    "tox-uv>=1.36.0",
+    "tox-gh-actions>=3.5.0",
 ]
 
 [tool.uv.build-backend]
