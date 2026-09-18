@@ -2,6 +2,7 @@ version: 2
 updates:
   - package-ecosystem: github-actions
     directory: /
+    target-branch: develop
     schedule:
       interval: weekly
     groups:
@@ -10,6 +11,7 @@ updates:
 
   - package-ecosystem: uv
     directory: /
+    target-branch: develop
     schedule:
       interval: weekly
     groups:
