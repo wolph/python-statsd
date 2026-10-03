@@ -1,5 +1,5 @@
 [build-system]
-requires = ["uv_build>=0.12.13,<0.13"]
+requires = ["uv_build>=0.12.17,<0.13"]
 build-backend = "uv_build"
 
 [project]
@@ -47,18 +47,18 @@ docs = [
 tests = [
     "pytest>=9.1.1",
     "pytest-cov>=7.1.0",
-    "coverage>=7.16.0",
+    "coverage>=7.16.1",
 ]
 dev = [
     "python-statsd[tests]",
-    "ruff>=0.16.7",
+    "ruff>=0.16.8",
     "mypy>=2.3.1",
     "basedpyright>=1.40.1",
-    "pyrefly>=1.3.0",
+    "pyrefly>=1.3.1",
     "ty",
 ]
 tox = [
-    "tox>=4.61.4",
+    "tox>=4.62.0",
     "tox-uv>=1.36.0",
     "tox-gh-actions>=3.5.0",
 ]
