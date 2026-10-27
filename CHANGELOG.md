@@ -1,5 +1,32 @@
 # Changelog
 
+## 3.0.1 (2026-10-28)
+
+### Packaging
+
+- The build backend requirement is now `uv_build>=0.11.0,<1`, so
+  distributions and build frontends that ship a newer uv can build the
+  sdist without waiting for a release. Every uv minor so far shipped
+  without a breaking change to the `uv_build` configuration, and CI
+  builds with the current uv on every run. Prompted by @jeremycline in
+  wolph/portalocker#155.
+- The development extras (`dev`, `tests`, `docs` and `tox`) now require
+  the versions the project is tested with (#48, #51, #55). The package
+  itself still has no runtime dependencies.
+
+### Documentation
+
+- A two-track quickstart takes you from `pip install` to a metric on a
+  graph, with or without a local Python.
+- The local stack runs the official statsd daemon from
+  `examples/statsd/config.js`, and `examples/grafana/import/` ships a
+  dashboard that imports into an existing Grafana and asks for the
+  datasource instead of assuming one.
+- Every module member carries a docstring, checked with pydocstyle, and
+  the documentation links point at the stable version.
+- The README reports CI, CodeQL and Coveralls coverage for the master
+  branch through live badges, and lists the sponsorship options.
+
 ## 3.0.0 (2026-09-12)
 
 First release since 2.1.0 (2017). Full modernization of the project.
