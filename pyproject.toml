@@ -37,6 +37,8 @@ Homepage = "https://github.com/WoLpH/python-statsd/"
 Documentation = "https://python-statsd.readthedocs.io/"
 Changelog = "https://github.com/WoLpH/python-statsd/blob/master/CHANGELOG.md"
 Funding = "https://github.com/sponsors/wolph"
+Repository = "https://github.com/wolph/python-statsd"
+Issues = "https://github.com/wolph/python-statsd/issues"
 
 [project.optional-dependencies]
 docs = [
